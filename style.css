@@ -13,7 +13,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background 0.3s, color 0.3s;
 }
 
 /* --- DARK MODE --- */
@@ -28,12 +27,11 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #0077cc;
+  background-color: #ff9800; /* arancione caldo */
   color: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 body.dark header {
-  background-color: #1f1f1f;
+  background-color: #cc7000;
 }
 header h1 { font-size: 1.5rem; }
 .header-actions button {
@@ -41,25 +39,18 @@ header h1 { font-size: 1.5rem; }
   padding: 0.3rem 0.6rem;
   font-size: 1rem;
   cursor: pointer;
-  border: none;
-  border-radius: 6px;
-}
-body.dark .header-actions button {
-  background-color: #333;
-  color: #eee;
 }
 
 /* --- CONTAINER --- */
 .container {
   margin: 1rem 2rem;
-  background: #fff;
+  background: #fff3e0; /* giallo chiaro */
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: background 0.3s;
 }
 body.dark .container {
-  background: #1e1e1e;
+  background: #3e2f1c;
 }
 .container h2 {
   display: flex;
@@ -71,16 +62,14 @@ body.dark .container {
   cursor: pointer;
   font-size: 1.2rem;
   border: none;
-  background: #0077cc;
+  background: #ff9800; /* arancione */
   color: #fff;
   border-radius: 6px;
   padding: 0.2rem 0.5rem;
-  transition: background 0.3s;
 }
 body.dark .addBtn {
-  background: #3399ff;
+  background: #cc7000;
 }
-.addBtn:hover { opacity: 0.9; }
 
 /* --- LISTE --- */
 ul {
@@ -91,12 +80,17 @@ li {
   align-items: center;
   padding: 0.5rem;
   margin-bottom: 0.3rem;
-  background: #f0f0f0;
+  background: #fff9c4; /* giallo chiaro */
+  border-left: 6px solid #ff9800; /* bordo arancione */
   border-radius: 6px;
   transition: background 0.3s;
 }
+li:hover {
+  background: #ffe082; /* giallo brillante */
+}
 body.dark li {
-  background: #2a2a2a;
+  background: #4a3a20;
+  border-left-color: #cc7000;
 }
 li span, li a {
   flex: 1;
@@ -110,6 +104,11 @@ li[data-icon]:before {
   font-size: 1.2rem;
 }
 
+/* Colori promemoria in base alla lunghezza della descrizione */
+li.longDesc { border-left-color: #f44336; } /* rosso per descrizioni lunghe */
+li.mediumDesc { border-left-color: #ff9800; } /* arancione */
+li.shortDesc { border-left-color: #ffeb3b; } /* giallo brillante */
+
 /* --- BOTTONI LISTE --- */
 .btnGroup button {
   margin-left: 0.3rem;
@@ -117,11 +116,6 @@ li[data-icon]:before {
   background: transparent;
   cursor: pointer;
   font-size: 1rem;
-}
-
-/* --- COLORS PROMEMORIA --- */
-li[data-icon][style*="border-left"] {
-  padding-left: 0.5rem;
 }
 
 /* --- OVERLAY PIN --- */
@@ -141,8 +135,6 @@ li[data-icon][style*="border-left"] {
   border-radius: 12px;
   text-align: center;
   width: 300px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: background 0.3s;
 }
 body.dark .pin-box {
   background: #1e1e1e;
@@ -158,13 +150,13 @@ body.dark .pin-box {
 .pin-box button {
   padding: 0.5rem 1rem;
   border: none;
-  background: #0077cc;
+  background: #ff9800; /* arancione */
   color: #fff;
   border-radius: 6px;
   cursor: pointer;
 }
 body.dark .pin-box button {
-  background: #3399ff;
+  background: #cc7000;
 }
 .error { color: red; margin-top: 0.5rem; }
 
@@ -185,8 +177,6 @@ body.dark .pin-box button {
   border-radius: 12px;
   width: 350px;
   max-width: 90%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: background 0.3s, color 0.3s;
 }
 body.dark .popup-content {
   background: #2a2a2a;
@@ -212,13 +202,10 @@ body.dark .popup-content textarea {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.3s;
 }
-.saveBtn { background: #0077cc; color: #fff; }
+.saveBtn { background: #ff9800; color: #fff; }
 .cancelBtn { background: #ccc; }
-.saveBtn:hover { opacity: 0.9; }
-.cancelBtn:hover { opacity: 0.9; }
-body.dark .saveBtn { background: #3399ff; color: #fff; }
+body.dark .saveBtn { background: #cc7000; color: #fff; }
 body.dark .cancelBtn { background: #555; color: #eee; }
 
 /* --- MEDIA QUERY --- */
