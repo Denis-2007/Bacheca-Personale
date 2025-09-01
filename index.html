@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <!-- SCHERMATA PIN -->
   <div id="pinOverlay" class="pin-overlay">
     <div class="pin-box">
@@ -27,47 +28,72 @@
       </div>
     </header>
 
-    <!-- SEZIONE PROMEMORIA -->
+    <!-- PROMEMORIA -->
     <div class="container">
       <h2>Promemoria <button class="addBtn" id="addReminderBtn">+</button></h2>
       <ul id="reminderList"></ul>
     </div>
 
-    <!-- POPUP PROMEMORIA -->
-    <div class="popup" id="reminderPopup">
-      <div class="popup-content">
-        <h3 id="reminderPopupTitle">Nuovo promemoria</h3>
-        <input type="text" id="reminderLabel" placeholder="Etichetta">
-        <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
-        <div class="popup-btns">
-          <button class="saveBtn" id="saveReminder">Salva</button>
-          <button class="cancelBtn" id="cancelReminder">Annulla</button>
-        </div>
-      </div>
+    <!-- LINK -->
+    <div class="container">
+      <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
+      <ul id="linkList"></ul>
     </div>
+  </div>
 
-    <!-- POPUP VISUALIZZA PROMEMORIA -->
-    <div class="popup" id="viewReminderPopup">
-      <div class="popup-content">
-        <h3 id="viewReminderLabel"></h3>
-        <p id="viewReminderDesc"></p>
-        <button class="cancelBtn" id="closeViewReminder">Chiudi</button>
-      </div>
-    </div>
-
-    <!-- POPUP IMPOSTAZIONI -->
-    <div class="popup" id="settingsPopup">
-      <div class="popup-content">
-        <h3>⚙️ Impostazioni</h3>
-        <input type="password" id="newPin" placeholder="Nuovo PIN">
-        <div class="popup-btns">
-          <button class="saveBtn" id="savePin">Cambia PIN</button>
-          <button class="cancelBtn" onclick="closePopup(settingsPopup)">Chiudi</button>
-        </div>
+  <!-- POPUP NUOVO/EDIT PROMEMORIA -->
+  <div class="popup" id="reminderPopup">
+    <div class="popup-content">
+      <h3>Nuovo promemoria</h3>
+      <input type="text" id="reminderLabel" placeholder="Etichetta">
+      <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
+      <div class="popup-btns">
+        <button class="saveBtn" id="saveReminder">Salva</button>
+        <button class="cancelBtn" id="cancelReminder">Annulla</button>
       </div>
     </div>
   </div>
 
+  <!-- POPUP VISUALIZZA PROMEMORIA -->
+  <div class="popup" id="viewReminderPopup">
+    <div class="popup-content">
+      <h3 id="viewReminderLabel"></h3>
+      <p id="viewReminderDesc"></p>
+      <div class="popup-btns">
+        <button class="cancelBtn" id="closeViewReminder">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP NUOVO/EDIT LINK -->
+  <div class="popup" id="linkPopup">
+    <div class="popup-content">
+      <h3>Nuovo link</h3>
+      <input type="text" id="label" placeholder="Etichetta">
+      <input type="url" id="url" placeholder="https://...">
+      <div class="popup-btns">
+        <button class="saveBtn" id="saveLink">Salva</button>
+        <button class="cancelBtn" id="cancelLink">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPUP IMPOSTAZIONI -->
+  <div class="popup" id="settingsPopup">
+    <div class="popup-content">
+      <h3>⚙️ Impostazioni</h3>
+      <input type="password" id="newPin" placeholder="Nuovo PIN">
+      <div class="popup-btns">
+        <button class="saveBtn" id="savePin">Cambia PIN</button>
+        <button class="cancelBtn" id="closeSettings">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUONO -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
 </body>
