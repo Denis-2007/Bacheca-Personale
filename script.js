@@ -1,8 +1,8 @@
-import { db, auth } from './firebase-init.js';
-import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
+import { db } from './firebase-init.js';
+import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-// === PIN Authentication (Firebase custom token placeholder for simplicity) ===
-let savedPin = "1234"; // default PIN
+// ===== PIN =====
+let savedPin = localStorage.getItem("userPIN") || "1234";
 const pinOverlay = document.getElementById("pinOverlay");
 const pinInput = document.getElementById("pinInput");
 const pinSubmit = document.getElementById("pinSubmit");
@@ -20,38 +20,50 @@ pinSubmit.onclick = async () => {
   }
 };
 
-// === Dark mode toggle ===
+// ===== Dark Mode =====
 const darkToggle = document.getElementById("darkModeToggle");
 darkToggle.onclick = () => {
   document.body.classList.toggle("dark");
   darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
 };
 
-// === Suono ===
+// ===== Suono =====
 const successSound = document.getElementById("successSound");
 function playSound() { successSound.play(); }
 
-// === PROMEMORIA ===
+// ===== POPUP =====
+function openPopup(id) { document.getElementById(id).style.display = "flex"; }
+function closePopup(id) { document.getElementById(id).style.display = "none"; }
+document.getElementById("settingsBtn").onclick = () => openPopup("settingsPopup");
+document.getElementById("addReminderBtn").onclick = () => openPopup("reminderPopup");
+document.getElementById("addLinkBtn").onclick = () => openPopup("linkPopup");
+
+// ===== Cambia PIN =====
+document.getElementById("savePin").onclick = () => {
+  const newPin = document.getElementById("newPin").value;
+  if (newPin.trim() !== "") {
+    savedPin = newPin;
+    localStorage.setItem("userPIN", newPin);
+    alert("✅ PIN cambiato!");
+    closePopup("settingsPopup");
+  }
+};
+
+// ===== PROMEMORIA =====
 const reminderList = document.getElementById("reminderList");
 let editReminderId = null;
 
 async function loadAllData() {
   // Carica promemoria
-  const querySnapshot = await getDocs(collection(db, "promemoria"));
+  const remindersSnap = await getDocs(collection(db, "promemoria"));
   reminderList.innerHTML = "";
-  querySnapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    addReminderToDOM(docSnap.id, data.label, data.desc);
-  });
+  remindersSnap.forEach(docSnap => addReminderToDOM(docSnap.id, docSnap.data().label, docSnap.data().desc));
 
   // Carica link
-  const linkSnapshot = await getDocs(collection(db, "links"));
+  const linkSnap = await getDocs(collection(db, "links"));
   const linkList = document.getElementById("linkList");
   linkList.innerHTML = "";
-  linkSnapshot.forEach((docSnap) => {
-    const data = docSnap.data();
-    addLinkToDOM(docSnap.id, data.label, data.url);
-  });
+  linkSnap.forEach(docSnap => addLinkToDOM(docSnap.id, docSnap.data().label, docSnap.data().url));
 }
 
 function addReminderToDOM(id, label, desc) {
@@ -61,9 +73,7 @@ function addReminderToDOM(id, label, desc) {
   const span = document.createElement("span");
   span.textContent = label;
   span.style.flex = "1";
-  span.onclick = () => {
-    alert(desc || "(Nessuna descrizione)");
-  };
+  span.onclick = () => alert(desc || "(Nessuna descrizione)");
 
   const btnGroup = document.createElement("div");
   btnGroup.className = "btnGroup";
@@ -79,10 +89,7 @@ function addReminderToDOM(id, label, desc) {
 
   const delBtn = document.createElement("button");
   delBtn.textContent = "🗑️";
-  delBtn.onclick = async () => {
-    await deleteDoc(doc(db, "promemoria", id));
-    li.remove();
-  };
+  delBtn.onclick = async () => { await deleteDoc(doc(db, "promemoria", id)); li.remove(); };
 
   btnGroup.appendChild(editBtn);
   btnGroup.appendChild(delBtn);
@@ -107,7 +114,7 @@ document.getElementById("saveReminder").onclick = async () => {
   closePopup("reminderPopup");
 };
 
-// === LINK ===
+// ===== LINK =====
 const linkList = document.getElementById("linkList");
 let editLinkId = null;
 
@@ -135,10 +142,7 @@ function addLinkToDOM(id, label, url) {
 
   const delBtn = document.createElement("button");
   delBtn.textContent = "🗑️";
-  delBtn.onclick = async () => {
-    await deleteDoc(doc(db, "links", id));
-    li.remove();
-  };
+  delBtn.onclick = async () => { await deleteDoc(doc(db, "links", id)); li.remove(); };
 
   btnGroup.appendChild(editBtn);
   btnGroup.appendChild(delBtn);
@@ -162,10 +166,3 @@ document.getElementById("saveLink").onclick = async () => {
   }
   closePopup("linkPopup");
 };
-
-// === POPUP ===
-function openPopup(id) { document.getElementById(id).style.display = "flex"; }
-function closePopup(id) { document.getElementById(id).style.display = "none"; }
-document.getElementById("addReminderBtn").onclick = () => openPopup("reminderPopup");
-document.getElementById("addLinkBtn").onclick = () => openPopup("linkPopup");
-
