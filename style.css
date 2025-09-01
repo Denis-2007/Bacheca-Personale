@@ -1,4 +1,106 @@
-/* === Schermata PIN === */
+/* === GENERALE === */
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  color: white;
+  padding: 15px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.header-actions button {
+  margin-left: 8px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff7e6;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #e63946;
+}
+.addBtn {
+  background: #ff8c42;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.addBtn:hover { background: #e63946; }
+
+/* LISTE */
+ul { list-style: none; padding: 0; margin: 0; }
+li {
+  margin: 10px 0;
+  padding: 12px 16px;
+  background: #fff4e6;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+li:hover { background: #ffe3b3; }
+.popup-btns {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.popup-btns button {
+  margin-left: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+.saveBtn { background: #ff8c42; color: white; }
+.saveBtn:hover { background: #e63946; }
+.cancelBtn { background: #ccc; color: #333; }
+.cancelBtn:hover { background: #999; }
+
+/* === POPUP === */
+.popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+.popup-content {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* === SCHERMATA PIN === */
 .pin-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -7,7 +109,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 200;
 }
 .pin-box {
   background: white;
@@ -37,78 +139,10 @@
 }
 .pin-box button:hover { background: #e63946; }
 
-/* === Generale === */
-body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
-  margin: 0;
-  padding: 0;
-  color: #333;
+/* DARK MODE */
+body.dark {
+  background: #1c1c1c;
+  color: #f1f1f1;
 }
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(90deg, #ff512f, #dd2476);
-  color: white;
-  padding: 15px 20px;
-}
-.header-actions button {
-  margin-left: 8px;
-  background: white;
-  border: none;
-  border-radius: 50%;
-  padding: 6px;
-  cursor: pointer;
-}
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-}
-h2 { display: flex; justify-content: space-between; align-items: center; color: #e63946; }
-.addBtn {
-  background: #ff8c42;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-
-/* Liste */
-ul { list-style: none; padding: 0; }
-li {
-  margin: 8px 0;
-  padding: 12px;
-  background: #fff4e6;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-.btnGroup button { margin-left: 5px; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
-
-/* Popup */
-.popup {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  width: 320px;
-}
-.saveBtn { background: #ff8c42; color: white; }
-.cancelBtn { background: #ccc; color: #333; }
-body.dark { background: #1c1c1c; color: #f1f1f1; }
-body.dark .container { background: #2a2a2a; color: white; }
+body.dark .container { background: #2a2a2a; color: #f1f1f1; }
+body.dark li { background: #3a3a3a; }
