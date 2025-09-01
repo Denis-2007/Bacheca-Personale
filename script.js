@@ -16,7 +16,15 @@ pinSubmit.onclick = () => {
   }
 };
 
-// Cambia PIN
+// Dark mode
+document.getElementById("darkModeToggle").onclick = () => document.body.classList.toggle("dark");
+
+// Popup
+function openPopup(popup) { popup.style.display = "flex"; }
+function closePopup(popup) { popup.style.display = "none"; }
+
+// SETTINGS
+const settingsPopup = document.getElementById("settingsPopup");
 document.getElementById("settingsBtn").onclick = () => openPopup(settingsPopup);
 document.getElementById("savePin").onclick = () => {
   const newPin = document.getElementById("newPin").value.trim();
@@ -28,31 +36,7 @@ document.getElementById("savePin").onclick = () => {
   }
 };
 
-// Dark mode
-document.getElementById("darkModeToggle").onclick = () => document.body.classList.toggle("dark");
-
-// Funzioni popup
-function openPopup(popup) { popup.style.display = "flex"; }
-function closePopup(popup) { popup.style.display = "none"; }
-
 // ==================== PROMEMORIA ====================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD2GGWWPn5P2xgw7YGWiJ5ZUXFRbHJkVy4",
-  authDomain: "bacheca-presonale.firebaseapp.com",
-  projectId: "bacheca-presonale",
-  storageBucket: "bacheca-presonale.firebasestorage.app",
-  messagingSenderId: "147412610802",
-  appId: "1:147412610802:web:b7cddfbf3a11c312576a6b",
-  measurementId: "G-QM12GWW70Y"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-// Elementi
 const reminderList = document.getElementById("reminderList");
 const addReminderBtn = document.getElementById("addReminderBtn");
 const reminderPopup = document.getElementById("reminderPopup");
@@ -63,31 +47,34 @@ const saveReminderBtn = document.getElementById("saveReminder");
 const cancelReminderBtn = document.getElementById("cancelReminder");
 const viewReminderLabel = document.getElementById("viewReminderLabel");
 const viewReminderDesc = document.getElementById("viewReminderDesc");
+const closeViewReminderBtn = document.getElementById("closeViewReminder");
 
 let reminders = [];
 let editReminderIndex = null;
 
-// Funzioni
 function loadReminders() {
   const stored = localStorage.getItem("reminders");
   reminders = stored ? JSON.parse(stored) : [];
   renderReminders();
 }
+
 function saveReminders() {
   localStorage.setItem("reminders", JSON.stringify(reminders));
 }
+
 function renderReminders() {
   reminderList.innerHTML = "";
   reminders.forEach((reminder, index) => {
     const li = document.createElement("li");
     li.textContent = reminder.label;
-    li.style.cursor = "pointer";
     li.onclick = () => {
       viewReminderLabel.textContent = reminder.label;
       viewReminderDesc.textContent = reminder.desc || "(Nessuna descrizione)";
       openPopup(viewReminderPopup);
     };
+
     const btnGroup = document.createElement("div");
+    btnGroup.style.display = "flex";
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "✏️";
@@ -140,6 +127,9 @@ cancelReminderBtn.onclick = () => {
   editReminderIndex = null;
   closePopup(reminderPopup);
 };
+
+// Chiudi descrizione
+closeViewReminderBtn.onclick = () => closePopup(viewReminderPopup);
 
 // Inizializzazione
 loadReminders();
