@@ -13,6 +13,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background 0.3s, color 0.3s;
 }
 
 /* --- DARK MODE --- */
@@ -29,6 +30,7 @@ header {
   padding: 1rem 2rem;
   background-color: #0077cc;
   color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 body.dark header {
   background-color: #1f1f1f;
@@ -39,6 +41,12 @@ header h1 { font-size: 1.5rem; }
   padding: 0.3rem 0.6rem;
   font-size: 1rem;
   cursor: pointer;
+  border: none;
+  border-radius: 6px;
+}
+body.dark .header-actions button {
+  background-color: #333;
+  color: #eee;
 }
 
 /* --- CONTAINER --- */
@@ -48,6 +56,7 @@ header h1 { font-size: 1.5rem; }
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: background 0.3s;
 }
 body.dark .container {
   background: #1e1e1e;
@@ -66,10 +75,12 @@ body.dark .container {
   color: #fff;
   border-radius: 6px;
   padding: 0.2rem 0.5rem;
+  transition: background 0.3s;
 }
 body.dark .addBtn {
   background: #3399ff;
 }
+.addBtn:hover { opacity: 0.9; }
 
 /* --- LISTE --- */
 ul {
@@ -82,6 +93,7 @@ li {
   margin-bottom: 0.3rem;
   background: #f0f0f0;
   border-radius: 6px;
+  transition: background 0.3s;
 }
 body.dark li {
   background: #2a2a2a;
@@ -95,6 +107,7 @@ li span, li a {
 li[data-icon]:before {
   content: attr(data-icon);
   margin-right: 0.5rem;
+  font-size: 1.2rem;
 }
 
 /* --- BOTTONI LISTE --- */
@@ -104,6 +117,11 @@ li[data-icon]:before {
   background: transparent;
   cursor: pointer;
   font-size: 1rem;
+}
+
+/* --- COLORS PROMEMORIA --- */
+li[data-icon][style*="border-left"] {
+  padding-left: 0.5rem;
 }
 
 /* --- OVERLAY PIN --- */
@@ -123,6 +141,8 @@ li[data-icon]:before {
   border-radius: 12px;
   text-align: center;
   width: 300px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: background 0.3s;
 }
 body.dark .pin-box {
   background: #1e1e1e;
@@ -165,6 +185,8 @@ body.dark .pin-box button {
   border-radius: 12px;
   width: 350px;
   max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: background 0.3s, color 0.3s;
 }
 body.dark .popup-content {
   background: #2a2a2a;
@@ -190,9 +212,12 @@ body.dark .popup-content textarea {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: opacity 0.3s;
 }
 .saveBtn { background: #0077cc; color: #fff; }
 .cancelBtn { background: #ccc; }
+.saveBtn:hover { opacity: 0.9; }
+.cancelBtn:hover { opacity: 0.9; }
 body.dark .saveBtn { background: #3399ff; color: #fff; }
 body.dark .cancelBtn { background: #555; color: #eee; }
 
