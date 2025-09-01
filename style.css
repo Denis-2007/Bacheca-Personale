@@ -1,51 +1,114 @@
+/* === Schermata PIN === */
+.pin-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #ff512f, #f09819);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.pin-box {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.pin-box h2 { margin-bottom: 15px; color: #e63946; }
+.pin-box input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  width: 120px;
+  margin-bottom: 10px;
+}
+.pin-box button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  background: #ff8c42;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+.pin-box button:hover { background: #e63946; }
+
+/* === Generale === */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
   margin: 0;
   padding: 0;
-  background-color: #fff5e6;
   color: #333;
 }
-
-.dark { background-color: #222; color: #f0f0f0; }
-
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #ffcc66;
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  color: white;
+  padding: 15px 20px;
+}
+.header-actions button {
+  margin-left: 8px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+h2 { display: flex; justify-content: space-between; align-items: center; color: #e63946; }
+.addBtn {
+  background: #ff8c42;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px 12px;
+  cursor: pointer;
 }
 
-section { padding: 10px; }
-
+/* Liste */
 ul { list-style: none; padding: 0; }
-
 li {
-  background: #fff3b3;
-  margin: 5px 0;
-  padding: 10px;
+  margin: 8px 0;
+  padding: 12px;
+  background: #fff4e6;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
-  border-left: 5px solid #ff9900;
-  border-radius: 5px;
+  align-items: center;
+  cursor: pointer;
 }
+.btnGroup button { margin-left: 5px; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
 
-li[data-icon]:before { content: attr(data-icon) " "; }
-
-button { margin-left: 5px; }
-
+/* Popup */
 .popup {
   display: none;
   position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fffae6;
-  padding: 20px;
-  border: 2px solid #ff9900;
-  border-radius: 10px;
-  z-index: 100;
-  flex-direction: column;
-  gap: 10px;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
 }
-
-.popupBtns { display: flex; justify-content: flex-end; gap: 10px; }
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 320px;
+}
+.saveBtn { background: #ff8c42; color: white; }
+.cancelBtn { background: #ccc; color: #333; }
+body.dark { background: #1c1c1c; color: #f1f1f1; }
+body.dark .container { background: #2a2a2a; color: white; }
