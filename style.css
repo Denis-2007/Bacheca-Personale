@@ -1,122 +1,204 @@
-/* === Schermata PIN === */
+/* --- RESET BASE --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* --- BODY --- */
+body {
+  background-color: #f5f5f5;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- DARK MODE --- */
+body.dark {
+  background-color: #121212;
+  color: #eee;
+}
+
+/* --- HEADER --- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #0077cc;
+  color: #fff;
+}
+body.dark header {
+  background-color: #1f1f1f;
+}
+header h1 { font-size: 1.5rem; }
+.header-actions button {
+  margin-left: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* --- CONTAINER --- */
+.container {
+  margin: 1rem 2rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+body.dark .container {
+  background: #1e1e1e;
+}
+.container h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.addBtn {
+  cursor: pointer;
+  font-size: 1.2rem;
+  border: none;
+  background: #0077cc;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+}
+body.dark .addBtn {
+  background: #3399ff;
+}
+
+/* --- LISTE --- */
+ul {
+  list-style: none;
+}
+li {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin-bottom: 0.3rem;
+  background: #f0f0f0;
+  border-radius: 6px;
+}
+body.dark li {
+  background: #2a2a2a;
+}
+li span, li a {
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+li[data-icon]:before {
+  content: attr(data-icon);
+  margin-right: 0.5rem;
+}
+
+/* --- BOTTONI LISTE --- */
+.btnGroup button {
+  margin-left: 0.3rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* --- OVERLAY PIN --- */
 .pin-overlay {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: linear-gradient(135deg, #ffdd00, #ff8c00);
+  background: rgba(0,0,0,0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
 }
 .pin-box {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  width: 300px;
 }
-.pin-box h2 { margin-bottom: 20px; color: #e63946; }
+body.dark .pin-box {
+  background: #1e1e1e;
+  color: #eee;
+}
 .pin-box input {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  text-align: center;
-  width: 120px;
-  margin-bottom: 15px;
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.7rem 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 .pin-box button {
-  padding: 12px 24px;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 16px;
-  background: #ff8c42;
-  color: white;
-  font-weight: bold;
+  background: #0077cc;
+  color: #fff;
+  border-radius: 6px;
   cursor: pointer;
 }
-.pin-box button:hover { background: #e63946; }
-.error { color: red; margin-top: 10px; }
+body.dark .pin-box button {
+  background: #3399ff;
+}
+.error { color: red; margin-top: 0.5rem; }
 
-/* === Stile generale === */
-body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  background: linear-gradient(135deg, #fff3b0, #ffb347);
-  margin: 0; padding: 0;
-  color: #333;
-}
-header {
-  display: flex; justify-content: space-between; align-items: center;
-  background: linear-gradient(90deg, #ff512f, #dd2476);
-  color: white; padding: 20px;
-  font-size: 1.8rem; font-weight: bold;
-}
-.header-actions button {
-  margin-left: 8px;
-  background: white; border: none; border-radius: 50%;
-  padding: 8px; cursor: pointer; font-size: 18px;
-}
-.header-actions button:hover { background: #eee; }
-
-/* === Contenitori === */
-.container {
-  max-width: 850px; margin: 25px auto;
-  background: #fff8e1; padding: 25px; border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-}
-h2 {
-  display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 3px solid #ff8c42; padding-bottom: 8px;
-  margin-bottom: 20px; color: #e63946; font-size: 1.3rem;
-}
-.addBtn {
-  background: #ff8c42; color: white; border: none;
-  padding: 8px 14px; border-radius: 50%; font-size: 20px;
-  cursor: pointer;
-}
-.addBtn:hover { background: #e63946; }
-
-/* === Liste === */
-ul { list-style: none; padding: 0; }
-li {
-  margin: 10px 0; padding: 14px;
-  background: #fff4e6; border-radius: 10px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-li::before {
-  content: attr(data-icon);
-  font-size: 20px; margin-right: 10px;
-}
-
-/* === Gruppo bottoni === */
-.btnGroup { display: flex; gap: 6px; }
-.btnGroup button { padding: 8px 14px; border-radius: 12px; cursor: pointer; font-weight: bold; }
-.editBtn { background: #ffa500; color: white; }
-.deleteBtn { background: #e63946; color: white; }
-
-/* === Popup === */
+/* --- POPUP --- */
 .popup {
-  display: none; position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.6);
-  justify-content: center; align-items: center;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
 }
 .popup-content {
-  background: #fff3b0; padding: 25px;
-  border-radius: 16px; width: 340px; box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 350px;
+  max-width: 90%;
 }
-.popup-content h3 { margin-top: 0; color: #ff512f; }
+body.dark .popup-content {
+  background: #2a2a2a;
+  color: #eee;
+}
 .popup-content input, .popup-content textarea {
-  width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
-.saveBtn { background: #ff8c42; color: white; padding: 10px 20px; border-radius: 12px; border: none; }
-.saveBtn:hover { background: #e63946; }
-.cancelBtn { background: #ccc; color: #333; padding: 10px 20px; border-radius: 12px; border: none; }
-.cancelBtn:hover { background: #999; }
+body.dark .popup-content input, 
+body.dark .popup-content textarea {
+  background: #1e1e1e;
+  border: 1px solid #555;
+  color: #eee;
+}
+.popup-content button {
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.saveBtn { background: #0077cc; color: #fff; }
+.cancelBtn { background: #ccc; }
+body.dark .saveBtn { background: #3399ff; color: #fff; }
+body.dark .cancelBtn { background: #555; color: #eee; }
 
-/* === Dark mode === */
-body.dark { background: #1c1c1c; color: #f1f1f1; }
-body.dark header { background: linear-gradient(90deg, #333, #111); }
-body.dark .container { background: #2a2a2a; color: #f1f1f1; }
-body.dark li { background: #3a3a3a; }
-body.dark .popup-content { background: #2a2a2a; color: white; }
+/* --- MEDIA QUERY --- */
+@media (max-width: 500px) {
+  header { flex-direction: column; align-items: flex-start; }
+  .container { margin: 1rem; }
+  .popup-content { width: 90%; }
+}
