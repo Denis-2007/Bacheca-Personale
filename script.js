@@ -61,7 +61,7 @@ async function loadAllData() {
   reminderList.innerHTML = "";
   remindersSnap.forEach(docSnap => {
     const data = docSnap.data();
-    addReminderToDOM(docSnap.id, data.label, data.desc);
+    addReminderToDOM(docSnap.id, data.label, data.desc, data.level);
   });
 
   // Carica link
@@ -74,13 +74,17 @@ async function loadAllData() {
 }
 
 // --- Funzioni DOM ---
-function addReminderToDOM(id, label, desc) {
+function addReminderToDOM(id, label, desc, level="yellow") {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "📝");
+  li.style.borderLeft = `6px solid ${levelColor(level)}`;
+
   const span = document.createElement("span");
   span.textContent = label;
   span.style.flex = "1";
-  span.onclick = () => alert(desc || "(Nessuna descrizione)");
+  span.onclick = () => {
+    alert(desc || "(Nessuna descrizione)");
+  };
 
   const btnGroup = document.createElement("div");
   btnGroup.className = "btnGroup";
@@ -108,6 +112,14 @@ function addReminderToDOM(id, label, desc) {
   reminderList.appendChild(li);
 }
 
+function levelColor(level) {
+  switch(level) {
+    case "orange": return "#FFA500";
+    case "red": return "#FF4500";
+    default: return "#FFD700"; // giallo
+  }
+}
+
 document.getElementById("saveReminder").onclick = async () => {
   const label = document.getElementById("reminderLabel").value;
   const desc = document.getElementById("reminderDesc").value;
@@ -128,6 +140,7 @@ document.getElementById("saveReminder").onclick = async () => {
 function addLinkToDOM(id, label, url) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "🔗");
+
   const a = document.createElement("a");
   a.href = url;
   a.target = "_blank";
@@ -189,3 +202,11 @@ document.getElementById("addLinkBtn").onclick = () => {
   editLinkId = null;
   openPopup("linkPopup");
 };
+
+// --- Tasti chiudi popup ---
+document.querySelectorAll(".popup .cancelBtn").forEach(btn => {
+  btn.onclick = (e) => {
+    const popup = e.target.closest(".popup");
+    popup.style.display = "none";
+  };
+});
