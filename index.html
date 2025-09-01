@@ -84,6 +84,76 @@
   <!-- SUONO -->
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
+  <!-- SCRIPT PRINCIPALE -->
   <script src="script.js"></script>
+
+  <!-- SCRIPT FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2GGWWPn5P2xgw7YGWiJ5ZUXFRbHJkVy4",
+      authDomain: "bacheca-presonale.firebaseapp.com",
+      databaseURL: "https://bacheca-presonale.firebaseio.com",
+      projectId: "bacheca-presonale",
+      storageBucket: "bacheca-presonale.firebasestorage.app",
+      messagingSenderId: "147412610802",
+      appId: "1:147412610802:web:b7cddfbf3a11c312576a6b",
+      measurementId: "G-QM12GWW70Y"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 🔹 PROMEMORIA FIREBASE
+    const reminderList = document.getElementById("reminderList");
+    document.getElementById("saveReminder").addEventListener("click", () => {
+      const label = document.getElementById("reminderLabel").value.trim();
+      const desc = document.getElementById("reminderDesc").value.trim();
+      if (label) {
+        push(ref(db, "promemoria"), { label, desc, data: new Date().toISOString() });
+      }
+    });
+    onValue(ref(db, "promemoria"), (snapshot) => {
+      reminderList.innerHTML = "";
+      snapshot.forEach((child) => {
+        const data = child.val();
+        const li = document.createElement("li");
+        li.setAttribute("data-icon", "📝");
+        li.textContent = data.label;
+        li.onclick = () => {
+          document.getElementById("viewReminderLabel").textContent = data.label;
+          document.getElementById("viewReminderDesc").textContent = data.desc || "(Nessuna descrizione)";
+          window.openPopup("viewReminderPopup");
+        };
+        reminderList.appendChild(li);
+      });
+    });
+
+    // 🔹 LINK FIREBASE
+    const linkList = document.getElementById("linkList");
+    document.getElementById("saveLink").addEventListener("click", () => {
+      const label = document.getElementById("label").value.trim();
+      const url = document.getElementById("url").value.trim();
+      if (label && url) {
+        push(ref(db, "link"), { label, url });
+      }
+    });
+    onValue(ref(db, "link"), (snapshot) => {
+      linkList.innerHTML = "";
+      snapshot.forEach((child) => {
+        const data = child.val();
+        const li = document.createElement("li");
+        li.setAttribute("data-icon", "🔗");
+        const a = document.createElement("a");
+        a.href = data.url;
+        a.textContent = data.label;
+        a.target = "_blank";
+        li.appendChild(a);
+        linkList.appendChild(li);
+      });
+    });
+  </script>
 </body>
 </html>
