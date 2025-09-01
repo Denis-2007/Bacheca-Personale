@@ -1,6 +1,4 @@
-import { db } from './firebase-init.js';
-import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
+// PIN
 let savedPin = localStorage.getItem("userPIN") || "1234";
 const pinOverlay = document.getElementById("pinOverlay");
 const pinInput = document.getElementById("pinInput");
@@ -8,12 +6,10 @@ const pinSubmit = document.getElementById("pinSubmit");
 const pinError = document.getElementById("pinError");
 const appContent = document.getElementById("appContent");
 
-// PIN
-pinSubmit.onclick = async () => {
+pinSubmit.onclick = () => {
   if (pinInput.value === savedPin) {
     pinOverlay.style.display = "none";
     appContent.style.display = "block";
-    await loadAllData();
   } else {
     pinError.textContent = "❌ PIN errato!";
     pinInput.value = "";
@@ -21,181 +17,129 @@ pinSubmit.onclick = async () => {
 };
 
 // Cambia PIN
-document.getElementById("settingsBtn").onclick = () => openPopup("settingsPopup");
+document.getElementById("settingsBtn").onclick = () => openPopup(settingsPopup);
 document.getElementById("savePin").onclick = () => {
   const newPin = document.getElementById("newPin").value.trim();
   if (newPin) {
     savedPin = newPin;
     localStorage.setItem("userPIN", newPin);
-    alert("✅ PIN cambiato con successo!");
-    closePopup("settingsPopup");
+    alert("✅ PIN cambiato!");
+    closePopup(settingsPopup);
   }
 };
 
 // Dark mode
-const darkToggle = document.getElementById("darkModeToggle");
-darkToggle.onclick = () => {
-  document.body.classList.toggle("dark");
-  darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+document.getElementById("darkModeToggle").onclick = () => document.body.classList.toggle("dark");
+
+// Funzioni popup
+function openPopup(popup) { popup.style.display = "flex"; }
+function closePopup(popup) { popup.style.display = "none"; }
+
+// ==================== PROMEMORIA ====================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD2GGWWPn5P2xgw7YGWiJ5ZUXFRbHJkVy4",
+  authDomain: "bacheca-presonale.firebaseapp.com",
+  projectId: "bacheca-presonale",
+  storageBucket: "bacheca-presonale.firebasestorage.app",
+  messagingSenderId: "147412610802",
+  appId: "1:147412610802:web:b7cddfbf3a11c312576a6b",
+  measurementId: "G-QM12GWW70Y"
 };
 
-// Suono
-const successSound = document.getElementById("successSound");
-function playSound() { successSound.play(); }
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
-// POPOLAMENTO PROMEMORIA
+// Elementi
 const reminderList = document.getElementById("reminderList");
-let editReminderId = null;
+const addReminderBtn = document.getElementById("addReminderBtn");
+const reminderPopup = document.getElementById("reminderPopup");
+const viewReminderPopup = document.getElementById("viewReminderPopup");
+const reminderLabelInput = document.getElementById("reminderLabel");
+const reminderDescInput = document.getElementById("reminderDesc");
+const saveReminderBtn = document.getElementById("saveReminder");
+const cancelReminderBtn = document.getElementById("cancelReminder");
+const viewReminderLabel = document.getElementById("viewReminderLabel");
+const viewReminderDesc = document.getElementById("viewReminderDesc");
 
-async function loadAllData() {
+let reminders = [];
+let editReminderIndex = null;
+
+// Funzioni
+function loadReminders() {
+  const stored = localStorage.getItem("reminders");
+  reminders = stored ? JSON.parse(stored) : [];
+  renderReminders();
+}
+function saveReminders() {
+  localStorage.setItem("reminders", JSON.stringify(reminders));
+}
+function renderReminders() {
   reminderList.innerHTML = "";
-  const remindersSnap = await getDocs(collection(db, "promemoria"));
-  remindersSnap.forEach(docSnap => {
-    const data = docSnap.data();
-    addReminderToDOM(docSnap.id, data.label, data.desc);
+  reminders.forEach((reminder, index) => {
+    const li = document.createElement("li");
+    li.textContent = reminder.label;
+    li.style.cursor = "pointer";
+    li.onclick = () => {
+      viewReminderLabel.textContent = reminder.label;
+      viewReminderDesc.textContent = reminder.desc || "(Nessuna descrizione)";
+      openPopup(viewReminderPopup);
+    };
+    const btnGroup = document.createElement("div");
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.onclick = (e) => {
+      e.stopPropagation();
+      reminderLabelInput.value = reminder.label;
+      reminderDescInput.value = reminder.desc;
+      editReminderIndex = index;
+      openPopup(reminderPopup);
+    };
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "🗑️";
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      reminders.splice(index, 1);
+      saveReminders();
+      renderReminders();
+    };
+
+    btnGroup.appendChild(editBtn);
+    btnGroup.appendChild(delBtn);
+    li.appendChild(btnGroup);
+    reminderList.appendChild(li);
   });
-
-  // LINK
-  const linkList = document.getElementById("linkList");
-  linkList.innerHTML = "";
-  const linksSnap = await getDocs(collection(db, "links"));
-  linksSnap.forEach(docSnap => {
-    const data = docSnap.data();
-    addLinkToDOM(docSnap.id, data.label, data.url);
-  });
 }
 
-function addReminderToDOM(id, label, desc) {
-  const li = document.createElement("li");
-  li.setAttribute("data-icon","📝");
-
-  const span = document.createElement("span");
-  span.textContent = label;
-  span.style.flex = "1";
-  span.onclick = () => viewReminder(label, desc);
-
-  const btnGroup = document.createElement("div");
-  btnGroup.className = "btnGroup";
-
-  const editBtn = document.createElement("button");
-  editBtn.textContent = "✏️";
-  editBtn.onclick = () => {
-    document.getElementById("reminderLabel").value = label;
-    document.getElementById("reminderDesc").value = desc;
-    editReminderId = id;
-    openPopup("reminderPopup");
-  };
-
-  const delBtn = document.createElement("button");
-  delBtn.textContent = "🗑️";
-  delBtn.onclick = async () => {
-    await deleteDoc(doc(db,"promemoria",id));
-    li.remove();
-  };
-
-  btnGroup.appendChild(editBtn);
-  btnGroup.appendChild(delBtn);
-  li.appendChild(span);
-  li.appendChild(btnGroup);
-  reminderList.appendChild(li);
-}
-
-function viewReminder(label, desc) {
-  document.getElementById("viewReminderLabel").textContent = label;
-  document.getElementById("viewReminderDesc").textContent = desc || "(Nessuna descrizione)";
-  openPopup("viewReminderPopup");
-}
-
-document.getElementById("addReminderBtn").onclick = () => {
-  document.getElementById("reminderLabel").value = "";
-  document.getElementById("reminderDesc").value = "";
-  editReminderId = null;
-  openPopup("reminderPopup");
+// Eventi
+addReminderBtn.onclick = () => {
+  reminderLabelInput.value = "";
+  reminderDescInput.value = "";
+  editReminderIndex = null;
+  openPopup(reminderPopup);
 };
-
-document.getElementById("saveReminder").onclick = async () => {
-  const label = document.getElementById("reminderLabel").value.trim();
-  const desc = document.getElementById("reminderDesc").value.trim();
+saveReminderBtn.onclick = () => {
+  const label = reminderLabelInput.value.trim();
+  const desc = reminderDescInput.value.trim();
   if (!label) return;
-
-  if (editReminderId) {
-    await updateDoc(doc(db,"promemoria",editReminderId),{label,desc});
-    editReminderId = null;
+  if (editReminderIndex !== null) {
+    reminders[editReminderIndex] = { label, desc };
+    editReminderIndex = null;
   } else {
-    const docRef = await addDoc(collection(db,"promemoria"),{label,desc});
-    addReminderToDOM(docRef.id,label,desc);
-    playSound();
+    reminders.push({ label, desc });
   }
-  closePopup("reminderPopup");
+  saveReminders();
+  renderReminders();
+  closePopup(reminderPopup);
+};
+cancelReminderBtn.onclick = () => {
+  editReminderIndex = null;
+  closePopup(reminderPopup);
 };
 
-document.getElementById("cancelReminder").onclick = () => closePopup("reminderPopup");
-
-// LINK
-const linkList = document.getElementById("linkList");
-let editLinkId = null;
-
-function addLinkToDOM(id,label,url){
-  const li=document.createElement("li");
-  li.setAttribute("data-icon","🔗");
-
-  const a=document.createElement("a");
-  a.href=url;
-  a.target="_blank";
-  a.textContent=label;
-  a.style.flex="1";
-
-  const btnGroup=document.createElement("div");
-  btnGroup.className="btnGroup";
-
-  const editBtn=document.createElement("button");
-  editBtn.textContent="✏️";
-  editBtn.onclick=()=>{
-    document.getElementById("label").value=label;
-    document.getElementById("url").value=url;
-    editLinkId=id;
-    openPopup("linkPopup");
-  };
-
-  const delBtn=document.createElement("button");
-  delBtn.textContent="🗑️";
-  delBtn.onclick=async()=>{
-    await deleteDoc(doc(db,"links",id));
-    li.remove();
-  };
-
-  btnGroup.appendChild(editBtn);
-  btnGroup.appendChild(delBtn);
-  li.appendChild(a);
-  li.appendChild(btnGroup);
-  linkList.appendChild(li);
-}
-
-document.getElementById("addLinkBtn").onclick=()=>{
-  document.getElementById("label").value="";
-  document.getElementById("url").value="";
-  editLinkId=null;
-  openPopup("linkPopup");
-};
-
-document.getElementById("saveLink").onclick=async()=>{
-  const label=document.getElementById("label").value.trim();
-  const url=document.getElementById("url").value.trim();
-  if(!label||!url) return;
-
-  if(editLinkId){
-    await updateDoc(doc(db,"links",editLinkId),{label,url});
-    editLinkId=null;
-  }else{
-    const docRef=await addDoc(collection(db,"links"),{label,url});
-    addLinkToDOM(docRef.id,label,url);
-    playSound();
-  }
-  closePopup("linkPopup");
-};
-
-document.getElementById("cancelLink").onclick=()=>closePopup("linkPopup");
-
-// POPUP
-function openPopup(id){document.getElementById(id).style.display="flex";}
-function closePopup(id){document.getElementById(id).style.display="none";}
+// Inizializzazione
+loadReminders();
