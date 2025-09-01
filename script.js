@@ -1,114 +1,114 @@
-// ELEMENTI
+import { db } from './firebase-init.js';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+// === PIN ===
+let savedPin = localStorage.getItem("userPIN") || "1234";
 const pinOverlay = document.getElementById("pinOverlay");
 const pinInput = document.getElementById("pinInput");
 const pinSubmit = document.getElementById("pinSubmit");
-const appContent = document.getElementById("appContent");
 const pinError = document.getElementById("pinError");
+const appContent = document.getElementById("appContent");
 
-const reminderPopup = document.getElementById("reminderPopup");
-const reminderList = document.getElementById("reminderList");
-const addReminderBtn = document.getElementById("addReminderBtn");
-const saveReminder = document.getElementById("saveReminder");
-const cancelReminder = document.getElementById("cancelReminder");
-const reminderLabel = document.getElementById("reminderLabel");
-const reminderDesc = document.getElementById("reminderDesc");
-
-const viewReminderPopup = document.getElementById("viewReminderPopup");
-const viewReminderLabel = document.getElementById("viewReminderLabel");
-const viewReminderDesc = document.getElementById("viewReminderDesc");
-const closeViewReminderBtn = document.getElementById("closeViewReminder");
-
-const linkPopup = document.getElementById("linkPopup");
-const linkList = document.getElementById("linkList");
-const addLinkBtn = document.getElementById("addLinkBtn");
-const saveLinkBtn = document.getElementById("saveLink");
-const cancelLinkBtn = document.getElementById("cancelLink");
-const linkLabelInput = document.getElementById("linkLabel");
-const linkURLInput = document.getElementById("linkURL");
-
-const settingsPopup = document.getElementById("settingsPopup");
-const settingsBtn = document.getElementById("settingsBtn");
-const closeSettingsBtn = document.getElementById("closeSettings");
-const savePinBtn = document.getElementById("savePin");
-const newPinInput = document.getElementById("newPin");
-
-let reminders = [];
-let links = [];
-let currentPIN = "1234";
-
-// ===== PIN =====
-pinSubmit.onclick = () => {
-  if(pinInput.value === currentPIN){
+pinSubmit.onclick = async () => {
+  if (pinInput.value === savedPin) {
     pinOverlay.style.display = "none";
     appContent.style.display = "block";
+    await loadAllData();
   } else {
-    pinError.textContent = "PIN errato!";
+    pinError.textContent = "❌ PIN errato!";
+    pinInput.value = "";
   }
 };
 
-// ===== PROMEMORIA =====
-addReminderBtn.onclick = () => {
-  reminderLabel.value = "";
-  reminderDesc.value = "";
+// === Dark mode toggle ===
+const darkToggle = document.getElementById("darkModeToggle");
+darkToggle.onclick = () => {
+  document.body.classList.toggle("dark");
+  darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+};
+
+// === Suono ===
+const successSound = document.getElementById("successSound");
+function playSound() { successSound.play(); }
+
+// === PROMEMORIA ===
+const reminderPopup = document.getElementById("reminderPopup");
+const viewReminderPopup = document.getElementById("viewReminderPopup");
+const reminderList = document.getElementById("reminderList");
+let editReminderId = null;
+
+document.getElementById("addReminderBtn").onclick = () => {
   reminderPopup.style.display = "flex";
+  document.getElementById("reminderLabel").value = "";
+  document.getElementById("reminderDesc").value = "";
+  editReminderId = null;
 };
-cancelReminder.onclick = () => { reminderPopup.style.display = "none"; };
-saveReminder.onclick = () => {
-  const label = reminderLabel.value;
-  const desc = reminderDesc.value;
-  if(label) {
-    reminders.push({label, desc});
-    renderReminders();
-    reminderPopup.style.display = "none";
+document.getElementById("cancelReminder").onclick = () => { reminderPopup.style.display = "none"; };
+
+// Salvataggio promemoria
+document.getElementById("saveReminder").onclick = async () => {
+  const label = document.getElementById("reminderLabel").value.trim();
+  const desc = document.getElementById("reminderDesc").value.trim();
+  if (!label) return alert("Inserisci etichetta!");
+  if (editReminderId) {
+    const docRef = doc(db, "reminders", editReminderId);
+    await updateDoc(docRef, { label, description: desc });
+  } else {
+    await addDoc(collection(db, "reminders"), { label, description: desc });
   }
+  reminderPopup.style.display = "none";
+  playSound();
+  await loadReminders();
 };
-function renderReminders(){
+
+// Chiudi visualizzazione promemoria
+document.getElementById("closeViewReminder").onclick = () => {
+  viewReminderPopup.style.display = "none";
+};
+
+// Mostra lista promemoria
+async function loadReminders() {
   reminderList.innerHTML = "";
-  reminders.forEach((r,i) => {
+  const querySnapshot = await getDocs(collection(db, "reminders"));
+  querySnapshot.forEach(docSnap => {
+    const data = docSnap.data();
     const li = document.createElement("li");
-    li.textContent = r.label;
+    li.textContent = data.label;
+    li.style.cursor = "pointer";
     li.onclick = () => {
-      viewReminderLabel.textContent = r.label;
-      viewReminderDesc.textContent = r.desc;
+      document.getElementById("viewReminderLabel").textContent = data.label;
+      document.getElementById("viewReminderDesc").textContent = data.description;
       viewReminderPopup.style.display = "flex";
     };
+
+    const btnGroup = document.createElement("div");
+    btnGroup.className = "btnGroup";
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.className = "editBtn";
+    editBtn.onclick = (e) => {
+      e.stopPropagation();
+      reminderPopup.style.display = "flex";
+      document.getElementById("reminderLabel").value = data.label;
+      document.getElementById("reminderDesc").value = data.description;
+      editReminderId = docSnap.id;
+    };
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "🗑️";
+    deleteBtn.className = "deleteBtn";
+    deleteBtn.onclick = async (e) => {
+      e.stopPropagation();
+      if (confirm("Vuoi eliminare il promemoria?")) {
+        await deleteDoc(doc(db, "reminders", docSnap.id));
+        playSound();
+        await loadReminders();
+      }
+    };
+    btnGroup.appendChild(editBtn);
+    btnGroup.appendChild(deleteBtn);
+    li.appendChild(btnGroup);
     reminderList.appendChild(li);
   });
 }
-closeViewReminderBtn.onclick = () => { viewReminderPopup.style.display = "none"; };
 
-// ===== LINK =====
-addLinkBtn.onclick = () => {
-  linkLabelInput.value = "";
-  linkURLInput.value = "";
-  linkPopup.style.display = "flex";
-};
-cancelLinkBtn.onclick = () => { linkPopup.style.display = "none"; };
-saveLinkBtn.onclick = () => {
-  const label = linkLabelInput.value;
-  const url = linkURLInput.value;
-  if(label && url){
-    links.push({label, url});
-    renderLinks();
-    linkPopup.style.display = "none";
-  }
-};
-function renderLinks(){
-  linkList.innerHTML = "";
-  links.forEach(l => {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    a.href = l.url;
-    a.target = "_blank";
-    a.textContent = l.label;
-    li.appendChild(a);
-    linkList.appendChild(li);
-  });
-}
-
-// ===== IMPOSTAZIONI PIN =====
-settingsBtn.onclick = () => { settingsPopup.style.display = "flex"; };
-closeSettingsBtn.onclick = () => { settingsPopup.style.display = "none"; };
-savePinBtn.onclick = () => {
-  if(newPinInput.value) { currentPIN = newPinInput.value; newPinInput.value = ""; settingsPopup.style.display = "none"; }
-};
+async function loadAllData() { await loadReminders(); /* aggiungi link se serve */ }
