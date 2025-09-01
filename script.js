@@ -2,7 +2,7 @@ import { db } from './firebase-init.js';
 import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 // === PIN ===
-let savedPin = localStorage.getItem("userPIN") || "1234";
+let savedPin = "1234"; // default PIN
 const pinOverlay = document.getElementById("pinOverlay");
 const pinInput = document.getElementById("pinInput");
 const pinSubmit = document.getElementById("pinSubmit");
@@ -27,60 +27,45 @@ darkToggle.onclick = () => {
   darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
 };
 
-// === Funzioni popup ===
-function openPopup(id) { document.getElementById(id).style.display = "flex"; }
-function closePopup(id) { document.getElementById(id).style.display = "none"; }
-
-// === Cambia PIN ===
-document.getElementById("settingsBtn").onclick = () => openPopup("settingsPopup");
-document.getElementById("savePin").onclick = () => {
-  const newPin = document.getElementById("newPin").value;
-  if (newPin.trim() !== "") {
-    savedPin = newPin;
-    localStorage.setItem("userPIN", newPin);
-    alert("✅ PIN cambiato!");
-    closePopup("settingsPopup");
-  }
-};
-
 // === Suono ===
 const successSound = document.getElementById("successSound");
 function playSound() { successSound.play(); }
 
-// === Promemoria ===
+// === PROMEMORIA ===
 const reminderList = document.getElementById("reminderList");
 let editReminderId = null;
 
-// === Link ===
-const linkList = document.getElementById("linkList");
-let editLinkId = null;
-
 async function loadAllData() {
-  // Carica promemoria
-  const remindersSnap = await getDocs(collection(db, "promemoria"));
+  // Promemoria
+  const querySnapshot = await getDocs(collection(db, "promemoria"));
   reminderList.innerHTML = "";
-  remindersSnap.forEach(docSnap => {
+  querySnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     addReminderToDOM(docSnap.id, data.label, data.desc);
   });
 
-  // Carica link
-  const linksSnap = await getDocs(collection(db, "links"));
+  // Link
+  const linkSnapshot = await getDocs(collection(db, "links"));
+  const linkList = document.getElementById("linkList");
   linkList.innerHTML = "";
-  linksSnap.forEach(docSnap => {
+  linkSnapshot.forEach((docSnap) => {
     const data = docSnap.data();
     addLinkToDOM(docSnap.id, data.label, data.url);
   });
 }
 
-// --- Funzioni DOM ---
 function addReminderToDOM(id, label, desc) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "📝");
+
   const span = document.createElement("span");
   span.textContent = label;
   span.style.flex = "1";
-  span.onclick = () => alert(desc || "(Nessuna descrizione)");
+  span.onclick = () => {
+    document.getElementById("viewReminderLabel").textContent = label;
+    document.getElementById("viewReminderDesc").textContent = desc || "(Nessuna descrizione)";
+    openPopup("viewReminderPopup");
+  };
 
   const btnGroup = document.createElement("div");
   btnGroup.className = "btnGroup";
@@ -124,10 +109,14 @@ document.getElementById("saveReminder").onclick = async () => {
   closePopup("reminderPopup");
 };
 
-// --- Link DOM ---
+// === LINK ===
+const linkList = document.getElementById("linkList");
+let editLinkId = null;
+
 function addLinkToDOM(id, label, url) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "🔗");
+
   const a = document.createElement("a");
   a.href = url;
   a.target = "_blank";
@@ -176,16 +165,35 @@ document.getElementById("saveLink").onclick = async () => {
   closePopup("linkPopup");
 };
 
-// --- Bottone aggiungi ---
-document.getElementById("addReminderBtn").onclick = () => {
-  document.getElementById("reminderLabel").value = "";
-  document.getElementById("reminderDesc").value = "";
-  editReminderId = null;
-  openPopup("reminderPopup");
+// === POPUP ===
+function openPopup(id) { document.getElementById(id).style.display = "flex"; }
+function closePopup(id) { 
+  document.getElementById(id).style.display = "none"; 
+  // reset campi popup
+  if(id === "reminderPopup") {
+    document.getElementById("reminderLabel").value = "";
+    document.getElementById("reminderDesc").value = "";
+    editReminderId = null;
+  }
+  if(id === "linkPopup") {
+    document.getElementById("label").value = "";
+    document.getElementById("url").value = "";
+    editLinkId = null;
+  }
+}
+
+document.getElementById("addReminderBtn").onclick = () => openPopup("reminderPopup");
+document.getElementById("addLinkBtn").onclick = () => openPopup("linkPopup");
+document.getElementById("settingsBtn").onclick = () => openPopup("settingsPopup");
+document.getElementById("savePin").onclick = () => {
+  const newPin = document.getElementById("newPin").value;
+  if(newPin.trim() !== "") {
+    savedPin = newPin;
+    alert("✅ PIN cambiato!");
+    closePopup("settingsPopup");
+  }
 };
-document.getElementById("addLinkBtn").onclick = () => {
-  document.getElementById("label").value = "";
-  document.getElementById("url").value = "";
-  editLinkId = null;
-  openPopup("linkPopup");
-};
+document.querySelectorAll(".cancelBtn").forEach(btn => btn.onclick = () => {
+  const popup = btn.closest(".popup");
+  closePopup(popup.id);
+});
