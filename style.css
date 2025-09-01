@@ -1,169 +1,225 @@
-/* ===== BODY ===== */
-body {
-  margin: 0;
-  font-family: 'Arial', sans-serif;
+/* ===== SCHERMATA PIN ===== */
+.pin-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(135deg, #ffed99, #ff9f43);
-  color: #333;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
 }
 
-/* ===== HEADER ===== */
+.pin-box {
+  background: #fff4e6;
+  padding: 2em 2.5em;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  width: 90%;
+  max-width: 320px;
+}
+
+.pin-box h2 {
+  margin-bottom: 1.5em;
+  color: #e63946;
+  font-size: 1.4rem;
+}
+
+.pin-box input[type="password"] {
+  padding: 0.6em;
+  width: 120px;
+  font-size: 1.1rem;
+  text-align: center;
+  border: 2px solid #ffcb05;
+  border-radius: 8px;
+  margin-bottom: 1em;
+}
+
+.pin-box button {
+  padding: 0.6em 1.2em;
+  background: #ff8c42;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pin-box button:hover {
+  background: #e63946;
+  transform: scale(1.05);
+}
+
+.pin-box .error {
+  color: red;
+  margin-top: 0.6em;
+  font-size: 0.9rem;
+}
+
+/* ===== GENERALE ===== */
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(135deg, #fff3b0, #ff7e5f);
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1em 2em;
-  background: linear-gradient(90deg, #ff512f, #ff9f43);
-  color: #fff;
-  border-bottom: 4px solid #e63946;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-header h1 {
-  font-size: 1.6rem;
-}
-
-/* ===== BOTTONI ===== */
-button, .addBtn, .saveBtn, .cancelBtn {
-  padding: 0.4em 0.8em;
-  margin: 0.2em;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  color: white;
+  padding: 20px;
+  font-size: 1.8rem;
   font-weight: bold;
-  transition: 0.2s;
+  text-shadow: 1px 1px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* Colori principali */
-.addBtn, .saveBtn { background: #ff8c42; color: #fff; }
-.addBtn:hover, .saveBtn:hover { background: #e63946; }
-.cancelBtn { background: #f1c40f; color: #333; }
-.cancelBtn:hover { background: #f39c12; }
-.editBtn { background: #ffa500; color: #fff; }
-.editBtn:hover { background: #ff7f50; }
-.deleteBtn { background: #e63946; color: #fff; }
-.deleteBtn:hover { background: #c62828; }
+.header-actions button {
+  margin-left: 8px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
 
-/* ===== CONTAINER ===== */
+.header-actions button:hover { background: #eee; }
+
+/* ===== CONTENITORI ===== */
 .container {
-  flex: 1;
-  padding: 1em 1.5em;
-  margin: 1em auto;
-  max-width: 700px;
+  max-width: 850px;
+  margin: 25px auto;
   background: #fff4e6;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .container:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-/* ===== LISTE ===== */
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-li {
+/* ===== Titoli con bottone ===== */
+h2 {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0.5em 0.8em;
-  margin-bottom: 0.4em;
-  background: #fff7e6;
-  border-left: 6px solid #ffcb05; /* giallo */
-  border-radius: 6px;
-  transition: 0.2s;
+  align-items: center;
+  border-bottom: 3px solid #ff8c42;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  color: #e63946;
+  font-size: 1.3rem;
+}
+
+/* ===== Pulsanti aggiungi ===== */
+.addBtn {
+  background: #ff8c42;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 50%;
+  font-size: 20px;
   cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s, background 0.2s;
 }
+.addBtn:hover { background: #e63946; transform: scale(1.1); }
 
-li:hover { background: #ffe8b3; }
-
-li[data-icon]::before {
+/* ===== Liste ===== */
+ul { list-style: none; padding: 0; }
+li {
+  margin: 10px 0;
+  padding: 14px;
+  background: #fff4e6;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+li:hover { transform: translateX(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+li::before {
   content: attr(data-icon);
-  margin-right: 0.5em;
-  font-size: 1.2rem;
+  font-size: 20px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
 }
+li:hover::before { transform: rotate(15deg) scale(1.2); }
 
-/* Gruppo pulsanti in lista */
-.btnGroup { display: flex; gap: 0.3em; }
+/* ===== Gruppo bottoni ===== */
+.btnGroup { display: flex; gap: 6px; }
+.btnGroup button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.btnGroup button:hover { transform: scale(1.05); opacity: 0.9; }
+.editBtn { background: #ffa500; color: white; }
+.deleteBtn { background: #e63946; color: white; }
 
-/* ===== POPUP ===== */
+/* ===== Popup ===== */
 .popup {
   display: none;
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.6);
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
-
 .popup-content {
-  background: #fff7e6;
-  padding: 1.2em 1.5em;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 360px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  gap: 0.8em;
+  background: #fff4e6;
+  padding: 25px;
+  border-radius: 16px;
+  width: 340px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.3);
 }
-
-/* ===== INPUT ===== */
-input[type="text"], input[type="password"], textarea {
-  padding: 0.4em 0.6em;
-  border: 2px solid #ffcb05;
-  border-radius: 6px;
+.popup-content h3 { margin-top: 0; color: #ff512f; }
+.popup-content input, .popup-content textarea {
   width: 100%;
-  font-size: 1em;
-  resize: vertical;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
 }
-
-/* ===== DARK MODE ===== */
-body.dark {
-  background: #1c1c1c;
-  color: #f1f1f1;
+.saveBtn {
+  background: #ff8c42;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 8px;
 }
-
-body.dark header {
-  background: linear-gradient(90deg, #333, #111);
+.saveBtn:hover { background: #e63946; transform: scale(1.05); }
+.cancelBtn {
+  background: #ccc;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
 }
-
-body.dark .container, 
-body.dark .popup-content {
-  background: #2a2a2a;
-}
-
-body.dark li {
-  background: #3a3a3a;
-  border-left-color: #ffcb05;
-}
-
-body.dark input, 
-body.dark textarea {
-  background: #444;
-  color: #f1f1f1;
-  border-color: #ffa500;
-}
-
-/* ===== ANIMAZIONI ===== */
-button:hover, .addBtn:hover, .saveBtn:hover, .cancelBtn:hover {
-  transform: scale(1.05);
-}
+.cancelBtn:hover { background: #aaa; }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-  header { flex-direction: column; font-size: 1.2rem; }
-  .container { margin: 0.5em 0.8em; padding: 1em; }
-  li { font-size: 0.95rem; }
-  .popup-content { width: 95%; }
+@media (max-width: 480px) {
+  .container { padding: 20px; }
+  h2 { font-size: 1.1rem; }
+  .pin-box { padding: 1.5em 1.8em; }
+  .pin-box input[type="password"] { width: 100px; font-size: 1rem; }
 }
