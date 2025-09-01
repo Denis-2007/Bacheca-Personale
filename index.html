@@ -51,15 +51,6 @@
     </div>
   </div>
 
-  <!-- POPUP VISUALIZZA PROMEMORIA -->
-  <div class="popup" id="viewReminderPopup">
-    <div class="popup-content">
-      <h3 id="viewReminderLabel"></h3>
-      <p id="viewReminderDesc"></p>
-      <button class="cancelBtn" onclick="closePopup('viewReminderPopup')">Chiudi</button>
-    </div>
-  </div>
-
   <!-- POPUP LINK -->
   <div class="popup" id="linkPopup">
     <div class="popup-content">
@@ -84,8 +75,10 @@
   <!-- SUONO -->
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
-  <!-- SCRIPT -->
+  <!-- FIREBASE INIT -->
   <script type="module" src="firebase-init.js"></script>
+
+  <!-- SCRIPT PRINCIPALE -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
