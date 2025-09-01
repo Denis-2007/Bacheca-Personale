@@ -29,7 +29,7 @@
 }
 .pin-box button {
   padding: 12px 24px;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   border-radius: 16px;
   background: #ff8c42;
   color: white;
@@ -139,7 +139,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
 .btnGroup { display: flex; gap: 6px; }
 .btnGroup button {
   padding: 12px 20px;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   border-radius: 16px;
   cursor: pointer;
   font-size: 14px;
@@ -182,7 +182,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   transition: transform 0.2s, background 0.2s;
 }
 .saveBtn:hover { background: #e63946; transform: scale(1.05); }
@@ -193,7 +193,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   transition: transform 0.2s, background 0.2s;
 }
 .cancelBtn:hover { background: #999; transform: scale(1.05); }
