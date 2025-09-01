@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <!-- SCHERMATA PIN -->
   <div id="pinOverlay" class="pin-overlay">
     <div class="pin-box">
@@ -28,29 +27,27 @@
       </div>
     </header>
 
-    <!-- PROMEMORIA -->
+    <!-- SEZIONE PROMEMORIA -->
     <div class="container">
       <h2>Promemoria <button class="addBtn" id="addReminderBtn">+</button></h2>
       <ul id="reminderList"></ul>
     </div>
 
-    <!-- LINK -->
+    <!-- SEZIONE LINK -->
     <div class="container">
       <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
       <ul id="linkList"></ul>
     </div>
   </div>
 
-  <!-- POPUP NUOVO/EDIT PROMEMORIA -->
+  <!-- POPUP PROMEMORIA -->
   <div class="popup" id="reminderPopup">
     <div class="popup-content">
-      <h3>Nuovo promemoria</h3>
+      <h3 id="reminderPopupTitle">Nuovo promemoria</h3>
       <input type="text" id="reminderLabel" placeholder="Etichetta">
       <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
-      <div class="popup-btns">
-        <button class="saveBtn" id="saveReminder">Salva</button>
-        <button class="cancelBtn" id="cancelReminder">Annulla</button>
-      </div>
+      <button class="saveBtn" id="saveReminder">Salva</button>
+      <button class="cancelBtn" id="cancelReminder">Annulla</button>
     </div>
   </div>
 
@@ -59,22 +56,18 @@
     <div class="popup-content">
       <h3 id="viewReminderLabel"></h3>
       <p id="viewReminderDesc"></p>
-      <div class="popup-btns">
-        <button class="cancelBtn" id="closeViewReminder">Chiudi</button>
-      </div>
+      <button class="cancelBtn" id="closeViewReminder">Chiudi</button>
     </div>
   </div>
 
-  <!-- POPUP NUOVO/EDIT LINK -->
+  <!-- POPUP LINK -->
   <div class="popup" id="linkPopup">
     <div class="popup-content">
-      <h3>Nuovo link</h3>
-      <input type="text" id="linkLabel" placeholder="Etichetta">
-      <input type="url" id="linkURL" placeholder="https://...">
-      <div class="popup-btns">
-        <button class="saveBtn" id="saveLink">Salva</button>
-        <button class="cancelBtn" id="cancelLink">Annulla</button>
-      </div>
+      <h3 id="linkPopupTitle">Nuovo link</h3>
+      <input type="text" id="label" placeholder="Etichetta">
+      <input type="url" id="url" placeholder="https://...">
+      <button class="saveBtn" id="saveLink">Salva</button>
+      <button class="cancelBtn" id="cancelLink">Annulla</button>
     </div>
   </div>
 
@@ -83,15 +76,15 @@
     <div class="popup-content">
       <h3>⚙️ Impostazioni</h3>
       <input type="password" id="newPin" placeholder="Nuovo PIN">
-      <div class="popup-btns">
-        <button class="saveBtn" id="savePin">Cambia PIN</button>
-        <button class="cancelBtn" id="closeSettings">Chiudi</button>
-      </div>
+      <button class="saveBtn" id="savePin">Cambia PIN</button>
+      <button class="cancelBtn" id="cancelSettings">Chiudi</button>
     </div>
   </div>
 
+  <!-- SUONO -->
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
+  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
 </body>
