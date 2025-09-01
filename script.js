@@ -18,13 +18,27 @@ const viewReminderLabel = document.getElementById("viewReminderLabel");
 const viewReminderDesc = document.getElementById("viewReminderDesc");
 const closeViewReminderBtn = document.getElementById("closeViewReminder");
 
+const linkPopup = document.getElementById("linkPopup");
+const linkList = document.getElementById("linkList");
+const addLinkBtn = document.getElementById("addLinkBtn");
+const saveLinkBtn = document.getElementById("saveLink");
+const cancelLinkBtn = document.getElementById("cancelLink");
+const linkLabelInput = document.getElementById("linkLabel");
+const linkURLInput = document.getElementById("linkURL");
+
+const settingsPopup = document.getElementById("settingsPopup");
+const settingsBtn = document.getElementById("settingsBtn");
+const closeSettingsBtn = document.getElementById("closeSettings");
+const savePinBtn = document.getElementById("savePin");
+const newPinInput = document.getElementById("newPin");
+
 let reminders = [];
+let links = [];
+let currentPIN = "1234";
 
 // ===== PIN =====
-const PIN_CORRENTE = "1234"; // esempio
-
 pinSubmit.onclick = () => {
-  if(pinInput.value === PIN_CORRENTE){
+  if(pinInput.value === currentPIN){
     pinOverlay.style.display = "none";
     appContent.style.display = "block";
   } else {
@@ -38,11 +52,7 @@ addReminderBtn.onclick = () => {
   reminderDesc.value = "";
   reminderPopup.style.display = "flex";
 };
-
-cancelReminder.onclick = () => {
-  reminderPopup.style.display = "none";
-};
-
+cancelReminder.onclick = () => { reminderPopup.style.display = "none"; };
 saveReminder.onclick = () => {
   const label = reminderLabel.value;
   const desc = reminderDesc.value;
@@ -52,7 +62,6 @@ saveReminder.onclick = () => {
     reminderPopup.style.display = "none";
   }
 };
-
 function renderReminders(){
   reminderList.innerHTML = "";
   reminders.forEach((r,i) => {
@@ -66,8 +75,40 @@ function renderReminders(){
     reminderList.appendChild(li);
   });
 }
+closeViewReminderBtn.onclick = () => { viewReminderPopup.style.display = "none"; };
 
-// ===== VISUALIZZA PROMEMORIA =====
-closeViewReminderBtn.onclick = () => {
-  viewReminderPopup.style.display = "none";
+// ===== LINK =====
+addLinkBtn.onclick = () => {
+  linkLabelInput.value = "";
+  linkURLInput.value = "";
+  linkPopup.style.display = "flex";
+};
+cancelLinkBtn.onclick = () => { linkPopup.style.display = "none"; };
+saveLinkBtn.onclick = () => {
+  const label = linkLabelInput.value;
+  const url = linkURLInput.value;
+  if(label && url){
+    links.push({label, url});
+    renderLinks();
+    linkPopup.style.display = "none";
+  }
+};
+function renderLinks(){
+  linkList.innerHTML = "";
+  links.forEach(l => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = l.url;
+    a.target = "_blank";
+    a.textContent = l.label;
+    li.appendChild(a);
+    linkList.appendChild(li);
+  });
+}
+
+// ===== IMPOSTAZIONI PIN =====
+settingsBtn.onclick = () => { settingsPopup.style.display = "flex"; };
+closeSettingsBtn.onclick = () => { settingsPopup.style.display = "none"; };
+savePinBtn.onclick = () => {
+  if(newPinInput.value) { currentPIN = newPinInput.value; newPinInput.value = ""; settingsPopup.style.display = "none"; }
 };
