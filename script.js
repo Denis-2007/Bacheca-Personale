@@ -1,23 +1,18 @@
-// 🔹 Import Firebase
+// 🔹 FIREBASE SETUP
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, push, onValue } from "firebase/database";
+import { getDatabase, ref, push, onValue, set } from "firebase/database";
 
-// 🔹 Config Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyD2GGWWPn5P2xgw7YGWiJ5ZUXFRbHJkVy4",
   authDomain: "bacheca-presonale.firebaseapp.com",
-  databaseURL: "https://bacheca-presonale-default-rtdb.firebaseio.com/",
   projectId: "bacheca-presonale",
-  storageBucket: "bacheca-presonale.appspot.com",
+  storageBucket: "bacheca-presonale.firebasestorage.app",
   messagingSenderId: "147412610802",
   appId: "1:147412610802:web:b7cddfbf3a11c312576a6b",
   measurementId: "G-QM12GWW70Y"
 };
 
-// 🔹 Inizializza Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const db = getDatabase(app);
 
 // === PIN ===
@@ -63,14 +58,24 @@ function playSound() { successSound.play(); }
 
 // === PROMEMORIA ===
 const reminderList = document.getElementById("reminderList");
-let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+let reminders = [];
 let editReminderIndex = null;
+
+const reminderRef = ref(db, "promemoria");
+
+// 🔹 Ascolta cambiamenti in real-time
+onValue(reminderRef, (snapshot) => {
+  reminders = [];
+  snapshot.forEach((child) => reminders.push({ key: child.key, ...child.val() }));
+  renderReminders();
+});
 
 function renderReminders() {
   reminderList.innerHTML = "";
   reminders.forEach((r, i) => {
     const li = document.createElement("li");
     li.setAttribute("data-icon", "📝");
+
     const label = document.createElement("span");
     label.textContent = r.label;
     label.style.flex = "1";
@@ -79,11 +84,13 @@ function renderReminders() {
       document.getElementById("viewReminderDesc").textContent = r.desc || "(Nessuna descrizione)";
       openPopup("viewReminderPopup");
     };
+
     const btnGroup = document.createElement("div");
     btnGroup.className = "btnGroup";
 
     const editBtn = document.createElement("button");
-    editBtn.textContent = "✏️"; editBtn.className = "editBtn";
+    editBtn.textContent = "✏️";
+    editBtn.className = "editBtn";
     editBtn.onclick = (e) => {
       e.stopPropagation();
       openPopup("reminderPopup");
@@ -93,22 +100,22 @@ function renderReminders() {
     };
 
     const delBtn = document.createElement("button");
-    delBtn.textContent = "🗑️"; delBtn.className = "deleteBtn";
-    delBtn.onclick = (e) => {
+    delBtn.textContent = "🗑️";
+    delBtn.className = "deleteBtn";
+    delBtn.onclick = async (e) => {
       e.stopPropagation();
-      reminders.splice(i, 1);
-      localStorage.setItem("reminders", JSON.stringify(reminders));
-      renderReminders();
+      const childRef = ref(db, "promemoria/" + r.key);
+      await set(childRef, null); // elimina da Firebase
     };
 
     btnGroup.appendChild(editBtn);
     btnGroup.appendChild(delBtn);
+
     li.appendChild(label);
     li.appendChild(btnGroup);
     reminderList.appendChild(li);
   });
 }
-renderReminders();
 
 document.getElementById("addReminderBtn").onclick = () => {
   openPopup("reminderPopup");
@@ -122,35 +129,46 @@ document.getElementById("saveReminder").onclick = () => {
   const desc = document.getElementById("reminderDesc").value;
   if (label.trim() !== "") {
     if (editReminderIndex !== null) {
-      reminders[editReminderIndex] = { label, desc };
+      const key = reminders[editReminderIndex].key;
+      set(ref(db, "promemoria/" + key), { label, desc, data: new Date().toISOString() });
     } else {
-      reminders.push({ label, desc });
+      push(reminderRef, { label, desc, data: new Date().toISOString() });
       playSound();
     }
-    localStorage.setItem("reminders", JSON.stringify(reminders));
-    renderReminders();
     closePopup("reminderPopup");
-
-    // 🔹 Firebase
-    push(ref(db, "promemoria"), { label, desc, timestamp: Date.now() });
   }
 };
 
 // === LINK ===
 const linkList = document.getElementById("linkList");
-let links = JSON.parse(localStorage.getItem("links")) || [];
+let links = [];
 let editLinkIndex = null;
+const linkRef = ref(db, "link");
+
+onValue(linkRef, (snapshot) => {
+  links = [];
+  snapshot.forEach((child) => links.push({ key: child.key, ...child.val() }));
+  renderLinks();
+});
 
 function renderLinks() {
   linkList.innerHTML = "";
   links.forEach((l, i) => {
     const li = document.createElement("li");
     li.setAttribute("data-icon", "🔗");
-    const anchor = document.createElement("a");
-    anchor.href = l.url; anchor.textContent = l.label; anchor.target = "_blank"; anchor.style.flex = "1";
-    const btnGroup = document.createElement("div"); btnGroup.className = "btnGroup";
 
-    const editBtn = document.createElement("button"); editBtn.textContent = "✏️"; editBtn.className = "editBtn";
+    const anchor = document.createElement("a");
+    anchor.href = l.url;
+    anchor.textContent = l.label;
+    anchor.target = "_blank";
+    anchor.style.flex = "1";
+
+    const btnGroup = document.createElement("div");
+    btnGroup.className = "btnGroup";
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "✏️";
+    editBtn.className = "editBtn";
     editBtn.onclick = (e) => {
       e.stopPropagation();
       openPopup("linkPopup");
@@ -159,22 +177,22 @@ function renderLinks() {
       editLinkIndex = i;
     };
 
-    const delBtn = document.createElement("button"); delBtn.textContent = "🗑️"; delBtn.className = "deleteBtn";
-    delBtn.onclick = (e) => {
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "🗑️";
+    delBtn.className = "deleteBtn";
+    delBtn.onclick = async (e) => {
       e.stopPropagation();
-      links.splice(i, 1);
-      localStorage.setItem("links", JSON.stringify(links));
-      renderLinks();
+      await set(ref(db, "link/" + l.key), null);
     };
 
     btnGroup.appendChild(editBtn);
     btnGroup.appendChild(delBtn);
+
     li.appendChild(anchor);
     li.appendChild(btnGroup);
     linkList.appendChild(li);
   });
 }
-renderLinks();
 
 document.getElementById("addLinkBtn").onclick = () => {
   openPopup("linkPopup");
@@ -188,17 +206,13 @@ document.getElementById("saveLink").onclick = () => {
   const url = document.getElementById("url").value;
   if (label.trim() !== "" && url.trim() !== "") {
     if (editLinkIndex !== null) {
-      links[editLinkIndex] = { label, url };
+      const key = links[editLinkIndex].key;
+      set(ref(db, "link/" + key), { label, url });
     } else {
-      links.push({ label, url });
+      push(linkRef, { label, url });
       playSound();
     }
-    localStorage.setItem("links", JSON.stringify(links));
-    renderLinks();
     closePopup("linkPopup");
-
-    // 🔹 Firebase
-    push(ref(db, "link"), { label, url, timestamp: Date.now() });
   }
 };
 
