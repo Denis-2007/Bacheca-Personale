@@ -1,76 +1,89 @@
-<script src="script.js"></script>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bacheca personale</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- SCHERMATA PIN -->
+  <div id="pinOverlay" class="pin-overlay">
+    <div class="pin-box">
+      <h2>🔒 Inserisci il PIN</h2>
+      <input type="password" id="pinInput" placeholder="PIN" maxlength="6">
+      <button id="pinSubmit">Accedi</button>
+      <p id="pinError" class="error"></p>
+    </div>
+  </div>
 
-<!-- SCRIPT FIREBASE -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-  import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+  <!-- CONTENUTO BACHECA -->
+  <div id="appContent" style="display:none;">
+    <header>
+      <h1>Bacheca personale</h1>
+      <div class="header-actions">
+        <button id="darkModeToggle">🌙</button>
+        <button id="settingsBtn">⚙️</button>
+      </div>
+    </header>
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyD2GGWWPn5P2xgw7YGWiJ5ZUXFRbHJkVy4",
-    authDomain: "bacheca-presonale.firebaseapp.com",
-    databaseURL: "https://bacheca-presonale.firebaseio.com",
-    projectId: "bacheca-presonale",
-    storageBucket: "bacheca-presonale.firebasestorage.app",
-    messagingSenderId: "147412610802",
-    appId: "1:147412610802:web:b7cddfbf3a11c312576a6b",
-    measurementId: "G-QM12GWW70Y"
-  };
+    <!-- SEZIONE PROMEMORIA -->
+    <div class="container">
+      <h2>Promemoria <button class="addBtn" id="addReminderBtn">+</button></h2>
+      <ul id="reminderList"></ul>
+    </div>
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+    <!-- SEZIONE LINK -->
+    <div class="container">
+      <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
+      <ul id="linkList"></ul>
+    </div>
+  </div>
 
-  // PROMEMORIA
-  document.getElementById("saveReminder").addEventListener("click", () => {
-    const label = document.getElementById("reminderLabel").value.trim();
-    const desc = document.getElementById("reminderDesc").value.trim();
-    if (label) {
-      push(ref(db, "promemoria"), { label, desc, data: new Date().toISOString() });
-      document.getElementById("reminderLabel").value = "";
-      document.getElementById("reminderDesc").value = "";
-      window.closePopup("reminderPopup");
-    }
-  });
+  <!-- POPUP PROMEMORIA -->
+  <div class="popup" id="reminderPopup">
+    <div class="popup-content">
+      <h3 id="reminderPopupTitle">Nuovo promemoria</h3>
+      <input type="text" id="reminderLabel" placeholder="Etichetta">
+      <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
+      <button class="saveBtn" id="saveReminder">Salva</button>
+      <button class="cancelBtn" onclick="closePopup('reminderPopup')">Annulla</button>
+    </div>
+  </div>
 
-  onValue(ref(db, "promemoria"), (snapshot) => {
-    const list = document.getElementById("reminderList");
-    list.innerHTML = "";
-    snapshot.forEach((child) => {
-      const data = child.val();
-      const li = document.createElement("li");
-      li.textContent = data.label;
-      li.onclick = () => {
-        document.getElementById("viewReminderLabel").textContent = data.label;
-        document.getElementById("viewReminderDesc").textContent = data.desc;
-        window.openPopup("viewReminderPopup");
-      };
-      list.appendChild(li);
-    });
-  });
+  <!-- POPUP VISUALIZZA PROMEMORIA -->
+  <div class="popup" id="viewReminderPopup">
+    <div class="popup-content">
+      <h3 id="viewReminderLabel"></h3>
+      <p id="viewReminderDesc"></p>
+      <button class="cancelBtn" onclick="closePopup('viewReminderPopup')">Chiudi</button>
+    </div>
+  </div>
 
-  // LINK
-  document.getElementById("saveLink").addEventListener("click", () => {
-    const label = document.getElementById("label").value.trim();
-    const url = document.getElementById("url").value.trim();
-    if (label && url) {
-      push(ref(db, "link"), { label, url });
-      document.getElementById("label").value = "";
-      document.getElementById("url").value = "";
-      window.closePopup("linkPopup");
-    }
-  });
+  <!-- POPUP LINK -->
+  <div class="popup" id="linkPopup">
+    <div class="popup-content">
+      <h3 id="linkPopupTitle">Nuovo link</h3>
+      <input type="text" id="label" placeholder="Etichetta">
+      <input type="url" id="url" placeholder="https://...">
+      <button class="saveBtn" id="saveLink">Salva</button>
+      <button class="cancelBtn" onclick="closePopup('linkPopup')">Annulla</button>
+    </div>
+  </div>
 
-  onValue(ref(db, "link"), (snapshot) => {
-    const list = document.getElementById("linkList");
-    list.innerHTML = "";
-    snapshot.forEach((child) => {
-      const data = child.val();
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = data.url;
-      a.textContent = data.label;
-      a.target = "_blank";
-      li.appendChild(a);
-      list.appendChild(li);
-    });
-  });
-</script>
+  <!-- POPUP IMPOSTAZIONI -->
+  <div class="popup" id="settingsPopup">
+    <div class="popup-content">
+      <h3>⚙️ Impostazioni</h3>
+      <input type="password" id="newPin" placeholder="Nuovo PIN">
+      <button class="saveBtn" id="savePin">Cambia PIN</button>
+      <button class="cancelBtn" onclick="closePopup('settingsPopup')">Chiudi</button>
+    </div>
+  </div>
+
+  <!-- SUONO -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
