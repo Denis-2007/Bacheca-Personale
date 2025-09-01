@@ -1,4 +1,3 @@
-/* ===== GENERALE ===== */
 body {
   font-family: "Segoe UI", Tahoma, sans-serif;
   margin: 0;
@@ -7,7 +6,6 @@ body {
   background: linear-gradient(135deg, #ffecd2, #fcb69f);
 }
 
-/* HEADER */
 header {
   display: flex;
   justify-content: space-between;
@@ -26,7 +24,6 @@ header {
   cursor: pointer;
 }
 
-/* CONTAINER */
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -36,7 +33,6 @@ header {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* TITOLI E BOTTONI */
 h2 {
   display: flex;
   justify-content: space-between;
@@ -54,7 +50,6 @@ h2 {
 }
 .addBtn:hover { background: #e63946; }
 
-/* LISTE */
 ul { list-style: none; padding: 0; margin: 0; }
 li {
   margin: 10px 0;
@@ -69,7 +64,6 @@ li {
 }
 li:hover { background: #ffe3b3; }
 
-/* POPUP */
 .popup {
   display: none;
   position: fixed;
@@ -106,7 +100,6 @@ li:hover { background: #ffe3b3; }
 .cancelBtn { background: #ccc; color: #333; }
 .cancelBtn:hover { background: #999; }
 
-/* SCHERMATA PIN */
 .pin-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -144,7 +137,6 @@ li:hover { background: #ffe3b3; }
 }
 .pin-box button:hover { background: #e63946; }
 
-/* DARK MODE */
 body.dark {
   background: #1c1c1c;
   color: #f1f1f1;
