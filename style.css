@@ -1,11 +1,13 @@
-/* === GENERALE === */
+/* ===== GENERALE ===== */
 body {
   font-family: "Segoe UI", Tahoma, sans-serif;
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
   margin: 0;
   padding: 0;
   color: #333;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
 }
+
+/* HEADER */
 header {
   display: flex;
   justify-content: space-between;
@@ -23,6 +25,8 @@ header {
   padding: 6px;
   cursor: pointer;
 }
+
+/* CONTAINER */
 .container {
   max-width: 800px;
   margin: 20px auto;
@@ -31,6 +35,8 @@ header {
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+
+/* TITOLI E BOTTONI */
 h2 {
   display: flex;
   justify-content: space-between;
@@ -62,25 +68,8 @@ li {
   transition: 0.2s;
 }
 li:hover { background: #ffe3b3; }
-.popup-btns {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-.popup-btns button {
-  margin-left: 8px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-.saveBtn { background: #ff8c42; color: white; }
-.saveBtn:hover { background: #e63946; }
-.cancelBtn { background: #ccc; color: #333; }
-.cancelBtn:hover { background: #999; }
 
-/* === POPUP === */
+/* POPUP */
 .popup {
   display: none;
   position: fixed;
@@ -99,8 +88,25 @@ li:hover { background: #ffe3b3; }
   max-width: 90%;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
+.popup-btns {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.popup-btns button {
+  margin-left: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+.saveBtn { background: #ff8c42; color: white; }
+.saveBtn:hover { background: #e63946; }
+.cancelBtn { background: #ccc; color: #333; }
+.cancelBtn:hover { background: #999; }
 
-/* === SCHERMATA PIN === */
+/* SCHERMATA PIN */
 .pin-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -118,7 +124,6 @@ li:hover { background: #ffe3b3; }
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
-.pin-box h2 { margin-bottom: 15px; color: #e63946; }
 .pin-box input {
   padding: 10px;
   border: 1px solid #ddd;
