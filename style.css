@@ -1,114 +1,13 @@
-body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  margin: 0;
-  padding: 0;
-  color: #333;
-  background: linear-gradient(135deg, #ffecd2, #fcb69f);
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(90deg, #ff512f, #dd2476);
-  color: white;
-  padding: 15px 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-.header-actions button {
-  margin-left: 8px;
-  background: white;
-  border: none;
-  border-radius: 50%;
-  padding: 6px;
-  cursor: pointer;
-}
-
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  background: #fff7e6;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-h2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #e63946;
-}
-.addBtn {
-  background: #ff8c42;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 6px 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.addBtn:hover { background: #e63946; }
-
-ul { list-style: none; padding: 0; margin: 0; }
-li {
-  margin: 10px 0;
-  padding: 12px 16px;
-  background: #fff4e6;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: 0.2s;
-}
-li:hover { background: #ffe3b3; }
-
-.popup {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-.popup-content {
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  width: 320px;
-  max-width: 90%;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-.popup-btns {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-.popup-btns button {
-  margin-left: 8px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-.saveBtn { background: #ff8c42; color: white; }
-.saveBtn:hover { background: #e63946; }
-.cancelBtn { background: #ccc; color: #333; }
-.cancelBtn:hover { background: #999; }
-
+/* === Schermata PIN === */
 .pin-overlay {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: linear-gradient(135deg, #ff512f, #f09819);
+  background: linear-gradient(135deg, #ffdd00, #ff8c00);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 200;
+  z-index: 1000;
 }
 .pin-box {
   background: white;
@@ -117,29 +16,107 @@ li:hover { background: #ffe3b3; }
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
+.pin-box h2 { margin-bottom: 20px; color: #e63946; }
 .pin-box input {
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   text-align: center;
   width: 120px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .pin-box button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #ff8c42;
   color: white;
   font-weight: bold;
   cursor: pointer;
 }
 .pin-box button:hover { background: #e63946; }
+.error { color: red; margin-top: 10px; }
 
-body.dark {
-  background: #1c1c1c;
-  color: #f1f1f1;
+/* === Stile generale === */
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: linear-gradient(135deg, #fff3b0, #ffb347);
+  margin: 0; padding: 0;
+  color: #333;
 }
+header {
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(90deg, #ff512f, #dd2476);
+  color: white; padding: 20px;
+  font-size: 1.8rem; font-weight: bold;
+}
+.header-actions button {
+  margin-left: 8px;
+  background: white; border: none; border-radius: 50%;
+  padding: 8px; cursor: pointer; font-size: 18px;
+}
+.header-actions button:hover { background: #eee; }
+
+/* === Contenitori === */
+.container {
+  max-width: 850px; margin: 25px auto;
+  background: #fff8e1; padding: 25px; border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+h2 {
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 3px solid #ff8c42; padding-bottom: 8px;
+  margin-bottom: 20px; color: #e63946; font-size: 1.3rem;
+}
+.addBtn {
+  background: #ff8c42; color: white; border: none;
+  padding: 8px 14px; border-radius: 50%; font-size: 20px;
+  cursor: pointer;
+}
+.addBtn:hover { background: #e63946; }
+
+/* === Liste === */
+ul { list-style: none; padding: 0; }
+li {
+  margin: 10px 0; padding: 14px;
+  background: #fff4e6; border-radius: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+li::before {
+  content: attr(data-icon);
+  font-size: 20px; margin-right: 10px;
+}
+
+/* === Gruppo bottoni === */
+.btnGroup { display: flex; gap: 6px; }
+.btnGroup button { padding: 8px 14px; border-radius: 12px; cursor: pointer; font-weight: bold; }
+.editBtn { background: #ffa500; color: white; }
+.deleteBtn { background: #e63946; color: white; }
+
+/* === Popup === */
+.popup {
+  display: none; position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  justify-content: center; align-items: center;
+}
+.popup-content {
+  background: #fff3b0; padding: 25px;
+  border-radius: 16px; width: 340px; box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+}
+.popup-content h3 { margin-top: 0; color: #ff512f; }
+.popup-content input, .popup-content textarea {
+  width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd;
+}
+.saveBtn { background: #ff8c42; color: white; padding: 10px 20px; border-radius: 12px; border: none; }
+.saveBtn:hover { background: #e63946; }
+.cancelBtn { background: #ccc; color: #333; padding: 10px 20px; border-radius: 12px; border: none; }
+.cancelBtn:hover { background: #999; }
+
+/* === Dark mode === */
+body.dark { background: #1c1c1c; color: #f1f1f1; }
+body.dark header { background: linear-gradient(90deg, #333, #111); }
 body.dark .container { background: #2a2a2a; color: #f1f1f1; }
 body.dark li { background: #3a3a3a; }
+body.dark .popup-content { background: #2a2a2a; color: white; }
