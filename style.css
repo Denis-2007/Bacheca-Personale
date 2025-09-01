@@ -29,7 +29,7 @@
 }
 .pin-box button {
   padding: 12px 24px;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   border-radius: 16px;
   background: #ff8c42;
   color: white;
@@ -38,7 +38,7 @@
   transition: background 0.2s, transform 0.2s;
 }
 .pin-box button:hover { background: #e63946; transform: scale(1.05); }
-.error { color: red; margin-top: 10px; }
+.error { color: red; margin-top: 10px; font-weight: bold; }
 
 /* === Stile generale === */
 body {
@@ -124,9 +124,10 @@ li {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  animation: fadeInUp 0.3s ease;
 }
-li:hover { transform: translateX(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+li:hover { transform: translateX(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); background: #ffe0c6; }
 li::before {
   content: attr(data-icon);
   font-size: 20px;
@@ -139,7 +140,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
 .btnGroup { display: flex; gap: 6px; }
 .btnGroup button {
   padding: 12px 20px;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   border-radius: 16px;
   cursor: pointer;
   font-size: 14px;
@@ -166,6 +167,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
   border-radius: 16px;
   width: 340px;
   box-shadow: 0 8px 18px rgba(0,0,0,0.3);
+  animation: popIn 0.4s ease;
 }
 .popup-content h3 { margin-top: 0; color: #ff512f; }
 .popup-content input, .popup-content textarea {
@@ -182,7 +184,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   transition: transform 0.2s, background 0.2s;
 }
 .saveBtn:hover { background: #e63946; transform: scale(1.05); }
@@ -193,7 +195,7 @@ li:hover::before { transform: rotate(15deg) scale(1.2); }
   padding: 12px 24px;
   font-weight: bold;
   cursor: pointer;
-  border: none;  /* Rimuove il bordo */
+  border: none;
   transition: transform 0.2s, background 0.2s;
 }
 .cancelBtn:hover { background: #999; transform: scale(1.05); }
@@ -206,6 +208,7 @@ body.dark {
 body.dark header { background: linear-gradient(90deg, #333, #111); }
 body.dark .container { background: #2a2a2a; color: #f1f1f1; }
 body.dark li { background: #3a3a3a; }
+body.dark li:hover { background: #444; }
 body.dark .popup-content { background: #2a2a2a; color: white; }
 
 /* === Animazioni === */
