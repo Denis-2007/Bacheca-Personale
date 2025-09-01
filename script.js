@@ -73,8 +73,8 @@ function addReminderToDOM(id, label, desc) {
   const span = document.createElement("span");
   span.textContent = label;
   span.style.flex = "1";
-  // Ora clic su label apre solo la visualizzazione
-  span.onclick = () => viewReminder(id, label, desc);
+  // Clic su label apre solo la visualizzazione
+  span.onclick = () => viewReminder(label, desc);
 
   const btnGroup = document.createElement("div");
   btnGroup.className = "btnGroup";
@@ -102,8 +102,8 @@ function addReminderToDOM(id, label, desc) {
   reminderList.appendChild(li);
 }
 
-// Visualizza solo la descrizione del promemoria
-function viewReminder(id, label, desc) {
+// Visualizza solo la descrizione
+function viewReminder(label, desc) {
   document.getElementById("viewReminderLabel").textContent = label;
   document.getElementById("viewReminderDesc").textContent = desc || "(Nessuna descrizione)";
   openPopup("viewReminderPopup");
