@@ -1,9 +1,11 @@
-// Import Firebase SDK
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-analytics.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
-import { getAuth, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-auth.js";
+// firebase-init.js
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyD2GGWWPn5P2xgw7YGWiJ5ZUXFRbHJkVy4",
   authDomain: "bacheca-presonale.firebaseapp.com",
@@ -14,7 +16,13 @@ const firebaseConfig = {
   measurementId: "G-QM12GWW70Y"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+
+// Initialize Firestore and Auth
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// Export to use in other scripts
+export { db, auth };
