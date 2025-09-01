@@ -1,204 +1,156 @@
-/* --- RESET BASE --- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-/* --- BODY --- */
+/* ===== BODY E BASE ===== */
 body {
-  background-color: #f5f5f5;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ffed99, #ff9f43);
   color: #333;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-/* --- DARK MODE --- */
-body.dark {
-  background-color: #121212;
-  color: #eee;
+h1, h2, h3 {
+  margin: 0.5em 0;
 }
 
-/* --- HEADER --- */
+/* ===== HEADER ===== */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #0077cc;
+  padding: 1em;
+  background: linear-gradient(90deg, #ff512f, #ff9f43);
   color: #fff;
 }
-body.dark header {
-  background-color: #1f1f1f;
-}
-header h1 { font-size: 1.5rem; }
-.header-actions button {
-  margin-left: 0.5rem;
-  padding: 0.3rem 0.6rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
 
-/* --- CONTAINER --- */
-.container {
-  margin: 1rem 2rem;
-  background: #fff;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-body.dark .container {
-  background: #1e1e1e;
-}
-.container h2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-.addBtn {
-  cursor: pointer;
-  font-size: 1.2rem;
+/* ===== BOTTONI ===== */
+button, .addBtn, .saveBtn, .cancelBtn {
+  padding: 0.5em 1em;
+  margin: 0.2em;
   border: none;
-  background: #0077cc;
-  color: #fff;
-  border-radius: 6px;
-  padding: 0.2rem 0.5rem;
-}
-body.dark .addBtn {
-  background: #3399ff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
 }
 
-/* --- LISTE --- */
+/* Colori principali */
+.addBtn, .saveBtn { background: #ff8c42; color: #fff; }
+.addBtn:hover, .saveBtn:hover { background: #e63946; }
+.cancelBtn { background: #f1c40f; color: #333; }
+.cancelBtn:hover { background: #f39c12; }
+.editBtn { background: #ffa500; color: #fff; }
+.editBtn:hover { background: #ff7f50; }
+.deleteBtn { background: #e63946; color: #fff; }
+.deleteBtn:hover { background: #c62828; }
+
+/* ===== CONTAINER PRINCIPALE ===== */
+.container {
+  flex: 1;
+  padding: 1em;
+  background: #fff4e6;
+}
+
+/* ===== LISTE ===== */
 ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
+
 li {
   display: flex;
   align-items: center;
-  padding: 0.5rem;
-  margin-bottom: 0.3rem;
-  background: #f0f0f0;
+  justify-content: space-between;
+  padding: 0.6em;
+  margin-bottom: 0.4em;
+  background: #fff7e6;
+  border-left: 6px solid #ffcb05; /* indicatore giallo */
   border-radius: 6px;
+  transition: 0.2s;
 }
-body.dark li {
-  background: #2a2a2a;
-}
-li span, li a {
-  flex: 1;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-li[data-icon]:before {
+
+li:hover { background: #ffe8b3; }
+
+li[data-icon]::before {
   content: attr(data-icon);
-  margin-right: 0.5rem;
+  margin-right: 0.5em;
 }
 
-/* --- BOTTONI LISTE --- */
-.btnGroup button {
-  margin-left: 0.3rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 1rem;
-}
+/* Gruppo pulsanti in lista */
+.btnGroup { display: flex; gap: 0.3em; }
 
-/* --- OVERLAY PIN --- */
-.pin-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-.pin-box {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  width: 300px;
-}
-body.dark .pin-box {
-  background: #1e1e1e;
-  color: #eee;
-}
-.pin-box input {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.7rem 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-.pin-box button {
-  padding: 0.5rem 1rem;
-  border: none;
-  background: #0077cc;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-}
-body.dark .pin-box button {
-  background: #3399ff;
-}
-.error { color: red; margin-top: 0.5rem; }
-
-/* --- POPUP --- */
+/* ===== POPUP ===== */
 .popup {
+  display: none;
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: none;
+  background: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 1000;
 }
+
 .popup-content {
-  background: #fff;
-  padding: 1.5rem;
+  background: #fff7e6;
+  padding: 1.5em;
   border-radius: 12px;
-  width: 350px;
-  max-width: 90%;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
+
+/* ===== INPUT ===== */
+input[type="text"], input[type="password"], textarea {
+  padding: 0.5em;
+  border: 2px solid #ffcb05;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 1em;
+}
+
+/* ===== DARK MODE ===== */
+body.dark {
+  background: #1c1c1c;
+  color: #f1f1f1;
+}
+
+body.dark header {
+  background: linear-gradient(90deg, #333, #111);
+  color: #fff;
+}
+
+body.dark .container, 
 body.dark .popup-content {
   background: #2a2a2a;
-  color: #eee;
 }
-.popup-content input, .popup-content textarea {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.7rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-body.dark .popup-content input, 
-body.dark .popup-content textarea {
-  background: #1e1e1e;
-  border: 1px solid #555;
-  color: #eee;
-}
-.popup-content button {
-  padding: 0.5rem 1rem;
-  margin-right: 0.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.saveBtn { background: #0077cc; color: #fff; }
-.cancelBtn { background: #ccc; }
-body.dark .saveBtn { background: #3399ff; color: #fff; }
-body.dark .cancelBtn { background: #555; color: #eee; }
 
-/* --- MEDIA QUERY --- */
-@media (max-width: 500px) {
-  header { flex-direction: column; align-items: flex-start; }
-  .container { margin: 1rem; }
-  .popup-content { width: 90%; }
+body.dark li {
+  background: #3a3a3a;
+  border-left-color: #ffcb05;
+}
+
+body.dark input, 
+body.dark textarea {
+  background: #444;
+  color: #f1f1f1;
+  border-color: #ffa500;
+}
+
+body.dark button, 
+body.dark .addBtn, 
+body.dark .saveBtn, 
+body.dark .cancelBtn, 
+body.dark .editBtn, 
+body.dark .deleteBtn {
+  opacity: 0.9;
+}
+
+/* ===== SUONI / ANIMAZIONI ===== */
+button:hover {
+  transform: scale(1.05);
 }
