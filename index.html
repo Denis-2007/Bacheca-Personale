@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <!-- SCHERMATA PIN -->
   <div id="pinOverlay" class="pin-overlay">
     <div class="pin-box">
@@ -27,13 +28,11 @@
       </div>
     </header>
 
-    <!-- SEZIONE PROMEMORIA -->
     <div class="container">
       <h2>Promemoria <button class="addBtn" id="addReminderBtn">+</button></h2>
       <ul id="reminderList"></ul>
     </div>
 
-    <!-- SEZIONE LINK -->
     <div class="container">
       <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
       <ul id="linkList"></ul>
@@ -43,7 +42,7 @@
   <!-- POPUP PROMEMORIA -->
   <div class="popup" id="reminderPopup">
     <div class="popup-content">
-      <h3 id="reminderPopupTitle">Nuovo promemoria</h3>
+      <h3>Nuovo promemoria</h3>
       <input type="text" id="reminderLabel" placeholder="Etichetta">
       <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
       <button class="saveBtn" id="saveReminder">Salva</button>
@@ -54,7 +53,7 @@
   <!-- POPUP LINK -->
   <div class="popup" id="linkPopup">
     <div class="popup-content">
-      <h3 id="linkPopupTitle">Nuovo link</h3>
+      <h3>Nuovo link</h3>
       <input type="text" id="label" placeholder="Etichetta">
       <input type="url" id="url" placeholder="https://...">
       <button class="saveBtn" id="saveLink">Salva</button>
@@ -72,13 +71,11 @@
     </div>
   </div>
 
-  <!-- SUONO -->
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
-  <!-- FIREBASE INIT -->
+  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
-
-  <!-- SCRIPT PRINCIPALE -->
   <script type="module" src="script.js"></script>
+
 </body>
 </html>
