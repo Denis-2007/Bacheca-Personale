@@ -50,6 +50,15 @@
     </div>
   </div>
 
+  <!-- POPUP DESCRIZIONE -->
+  <div class="popup" id="descPopup">
+    <div class="popup-content">
+      <h3>Descrizione</h3>
+      <p id="descText"></p>
+      <button class="cancelBtn" id="closeDescBtn">Chiudi</button>
+    </div>
+  </div>
+
   <!-- POPUP LINK -->
   <div class="popup" id="linkPopup">
     <div class="popup-content">
@@ -68,15 +77,6 @@
       <input type="password" id="newPin" placeholder="Nuovo PIN">
       <button class="saveBtn" id="savePin">Cambia PIN</button>
       <button class="cancelBtn" onclick="closePopup('settingsPopup')">Chiudi</button>
-    </div>
-  </div>
-
-  <!-- POPUP DESCRIZIONE PROMEMORIA -->
-  <div class="popup" id="descPopup">
-    <div class="popup-content">
-      <h3>Descrizione</h3>
-      <p id="descText" style="white-space: pre-wrap; min-height: 50px;"></p>
-      <button class="cancelBtn" onclick="closePopup('descPopup')">Chiudi</button>
     </div>
   </div>
 
