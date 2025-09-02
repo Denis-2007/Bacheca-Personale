@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bacheca personale</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Stile -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -74,14 +82,10 @@
   <div class="popup" id="settingsPopup">
     <div class="popup-content">
       <h3>⚙️ Impostazioni</h3>
-
       <input type="password" id="newPin" placeholder="Nuovo PIN">
       <button class="saveBtn" id="savePin">Cambia PIN</button>
-
-      <!-- 🔊 Toggle suoni -->
-      <button class="soundToggleBtn" id="toggleSound">Suoni</button>
-
       <button class="cancelBtn" id="closeSettings">Chiudi</button>
+      <button class="soundToggleBtn on" id="toggleSound">🔊 Suoni Attivi</button>
     </div>
   </div>
 
@@ -91,6 +95,7 @@
   <audio id="soundDelete" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="soundClick" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_click.ogg"></audio>
 
+  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
 
