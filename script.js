@@ -13,7 +13,7 @@ pinSubmit.onclick = async () => {
   if (pinInput.value === savedPin) {
     pinOverlay.style.display = "none";
     appContent.style.display = "block";
-    await loadAllData();
+    await loadAllData(); // CARICA DATI DOPO IL PIN
   } else {
     pinError.textContent = "❌ PIN errato!";
     pinInput.value = "";
@@ -56,11 +56,10 @@ const linkList = document.getElementById("linkList");
 let editLinkId = null;
 
 // === Descrizione popup ===
-const descPopup = document.getElementById("descPopup");
 const descContent = document.getElementById("descContent");
 
 async function loadAllData() {
-  // Promemoria
+  // --- PROMEMORIA ---
   const remindersSnap = await getDocs(collection(db, "promemoria"));
   reminderList.innerHTML = "";
   remindersSnap.forEach(docSnap => {
@@ -68,7 +67,7 @@ async function loadAllData() {
     addReminderToDOM(docSnap.id, data.label, data.desc);
   });
 
-  // Links
+  // --- LINK ---
   const linksSnap = await getDocs(collection(db, "links"));
   linkList.innerHTML = "";
   linksSnap.forEach(docSnap => {
@@ -77,7 +76,7 @@ async function loadAllData() {
   });
 }
 
-// --- DOM Functions ---
+// --- FUNZIONI DOM ---
 function addReminderToDOM(id, label, desc) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "📝");
@@ -131,7 +130,7 @@ document.getElementById("saveReminder").onclick = async () => {
   closePopup("reminderPopup");
 };
 
-// --- Links ---
+// --- LINKS ---
 function addLinkToDOM(id, label, url) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "🔗");
@@ -183,7 +182,7 @@ document.getElementById("saveLink").onclick = async () => {
   closePopup("linkPopup");
 };
 
-// --- Bottone aggiungi ---
+// --- BOTTONE AGGIUNGI ---
 document.getElementById("addReminderBtn").onclick = () => {
   document.getElementById("reminderLabel").value = "";
   document.getElementById("reminderDesc").value = "";
