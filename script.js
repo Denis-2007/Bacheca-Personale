@@ -78,7 +78,7 @@ async function loadAllData() {
 function addReminderToDOM(id, label, desc) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "📝");
-  li.style.background = "#fff3e0";
+  li.style.background = "#fff3e0"; // colore leggero
 
   const span = document.createElement("span");
   span.textContent = label;
@@ -130,10 +130,15 @@ document.getElementById("saveReminder").onclick = async () => {
   closePopup("reminderPopup");
 };
 
+document.getElementById("cancelReminder").onclick = () => {
+  editReminderId = null;
+  closePopup("reminderPopup");
+};
+
 function addLinkToDOM(id, label, url) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "🔗");
-  li.style.background = "#fffde7";
+  li.style.background = "#fffde7"; // colore leggero
 
   const a = document.createElement("a");
   a.href = url;
@@ -183,6 +188,11 @@ document.getElementById("saveLink").onclick = async () => {
   closePopup("linkPopup");
 };
 
+document.getElementById("cancelLink").onclick = () => {
+  editLinkId = null;
+  closePopup("linkPopup");
+};
+
 // --- Bottone aggiungi ---
 document.getElementById("addReminderBtn").onclick = () => {
   document.getElementById("reminderLabel").value = "";
@@ -196,3 +206,6 @@ document.getElementById("addLinkBtn").onclick = () => {
   editLinkId = null;
   openPopup("linkPopup");
 };
+
+// --- Chiusura popup descrizione ---
+document.getElementById("closeDescPopup").onclick = () => closePopup("descPopup");
