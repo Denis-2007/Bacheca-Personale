@@ -42,7 +42,7 @@
   <!-- POPUP PROMEMORIA -->
   <div class="popup" id="reminderPopup">
     <div class="popup-content">
-      <h3>Nuovo promemoria</h3>
+      <h3>Promemoria</h3>
       <input type="text" id="reminderLabel" placeholder="Etichetta">
       <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
       <button class="saveBtn" id="saveReminder">Salva</button>
@@ -51,18 +51,18 @@
   </div>
 
   <!-- POPUP DESCRIZIONE -->
-  <div class="popup" id="viewDescPopup">
+  <div class="popup" id="descPopup">
     <div class="popup-content">
       <h3>Descrizione</h3>
-      <p id="viewDescText"></p>
-      <button class="cancelBtn" onclick="closePopup('viewDescPopup')">Chiudi</button>
+      <p id="descText"></p>
+      <button class="cancelBtn" id="closeDesc">Chiudi</button>
     </div>
   </div>
 
   <!-- POPUP LINK -->
   <div class="popup" id="linkPopup">
     <div class="popup-content">
-      <h3>Nuovo link</h3>
+      <h3>Link</h3>
       <input type="text" id="label" placeholder="Etichetta">
       <input type="url" id="url" placeholder="https://...">
       <button class="saveBtn" id="saveLink">Salva</button>
@@ -76,12 +76,13 @@
       <h3>⚙️ Impostazioni</h3>
       <input type="password" id="newPin" placeholder="Nuovo PIN">
       <button class="saveBtn" id="savePin">Cambia PIN</button>
-      <button class="cancelBtn" onclick="closePopup('settingsPopup')">Chiudi</button>
+      <button class="cancelBtn" id="closeSettings">Chiudi</button>
     </div>
   </div>
 
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
+  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
 
