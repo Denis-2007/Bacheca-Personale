@@ -224,3 +224,21 @@ li span, li a { flex: 1; cursor: pointer; }
   .container { margin: 1rem; }
   .popup-content { width: 90%; }
 }
+
+/* Toggle suoni */
+.soundToggleBtn {
+  margin-top: 0.8rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #6a11cb;
+  color: #fff;
+  transition: background 0.3s, transform 0.2s;
+}
+.soundToggleBtn:hover { transform: scale(1.05); }
+.soundToggleBtn.on { background: #28a745; }
+.soundToggleBtn.off { background: #dc3545; }
+
