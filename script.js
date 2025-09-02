@@ -1,5 +1,5 @@
 import { db } from './firebase-init.js';
-import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { collection, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 /* --- PIN --- */
 let savedPin = localStorage.getItem("userPIN") || "1234";
@@ -13,7 +13,7 @@ pinSubmit.onclick = async () => {
   if(pinInput.value===savedPin){
     pinOverlay.style.display="none";
     appContent.style.display="block";
-    await loadAllData();
+    listenData(); // 🔥 parte l’ascolto in tempo reale
   } else {
     pinError.textContent="❌ PIN errato!";
     pinInput.value="";
@@ -56,22 +56,24 @@ let editReminderId=null;
 const linkList=document.getElementById("linkList");
 let editLinkId=null;
 
-/* --- LOAD DATA --- */
-async function loadAllData(){
+/* --- LISTENER DATI IN TEMPO REALE --- */
+function listenData(){
   // PROMEMORIA
-  const remindersSnap=await getDocs(collection(db,"promemoria"));
-  reminderList.innerHTML="";
-  remindersSnap.forEach(docSnap=>{
-    const data=docSnap.data();
-    addReminderToDOM(docSnap.id,data.label,data.desc);
+  onSnapshot(collection(db,"promemoria"), (snapshot)=>{
+    reminderList.innerHTML="";
+    snapshot.forEach(docSnap=>{
+      const data=docSnap.data();
+      addReminderToDOM(docSnap.id,data.label,data.desc);
+    });
   });
 
   // LINK
-  const linksSnap=await getDocs(collection(db,"links"));
-  linkList.innerHTML="";
-  linksSnap.forEach(docSnap=>{
-    const data=docSnap.data();
-    addLinkToDOM(docSnap.id,data.label,data.url);
+  onSnapshot(collection(db,"links"), (snapshot)=>{
+    linkList.innerHTML="";
+    snapshot.forEach(docSnap=>{
+      const data=docSnap.data();
+      addLinkToDOM(docSnap.id,data.label,data.url);
+    });
   });
 }
 
@@ -99,10 +101,7 @@ function addReminderToDOM(id,label,desc){
 
   const delBtn=document.createElement("button");
   delBtn.textContent="🗑️";
-  delBtn.onclick=async()=>{
-    await deleteDoc(doc(db,"promemoria",id));
-    li.remove();
-  };
+  delBtn.onclick=async()=>{ await deleteDoc(doc(db,"promemoria",id)); };
 
   btnGroup.appendChild(editBtn);
   btnGroup.appendChild(delBtn);
@@ -120,8 +119,7 @@ document.getElementById("saveReminder").onclick=async()=>{
     await updateDoc(doc(db,"promemoria",editReminderId),{label,desc});
     editReminderId=null;
   } else {
-    const docRef=await addDoc(collection(db,"promemoria"),{label,desc});
-    addReminderToDOM(docRef.id,label,desc);
+    await addDoc(collection(db,"promemoria"),{label,desc});
     playSound();
   }
   closePopup("reminderPopup");
@@ -149,10 +147,7 @@ function addLinkToDOM(id,label,url){
 
   const delBtn=document.createElement("button");
   delBtn.textContent="🗑️";
-  delBtn.onclick=async()=>{
-    await deleteDoc(doc(db,"links",id));
-    li.remove();
-  };
+  delBtn.onclick=async()=>{ await deleteDoc(doc(db,"links",id)); };
 
   btnGroup.appendChild(editBtn);
   btnGroup.appendChild(delBtn);
@@ -170,8 +165,7 @@ document.getElementById("saveLink").onclick=async()=>{
     await updateDoc(doc(db,"links",editLinkId),{label,url});
     editLinkId=null;
   } else {
-    const docRef=await addDoc(collection(db,"links"),{label,url});
-    addLinkToDOM(docRef.id,label,url);
+    await addDoc(collection(db,"links"),{label,url});
     playSound();
   }
   closePopup("linkPopup");
