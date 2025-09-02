@@ -6,6 +6,16 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* LINK */
+a {
+  text-decoration: none; /* rimuove la sottolineatura */
+  color: inherit;        /* eredita il colore del testo circostante */
+  transition: color 0.3s;
+}
+a:hover {
+  color: #6a11cb; /* colore elegante al passaggio del mouse */
+}
+
 /* BODY */
 body {
   background: #f9f9f9;
