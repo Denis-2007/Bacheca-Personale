@@ -46,19 +46,38 @@ document.getElementById("closeSettings").onclick=()=>closePopup("settingsPopup")
 
 /* --- SUONI --- */
 let soundEnabled = localStorage.getItem("soundEnabled") !== "false";
+let audioUnlocked = false;
 
 const soundCreate = document.getElementById("soundCreate");
 const soundSave   = document.getElementById("soundSave");
 const soundDelete = document.getElementById("soundDelete");
 const soundClick  = document.getElementById("soundClick");
 
+// sblocca audio al primo click dell'utente
+document.body.addEventListener("click", () => {
+  if(!audioUnlocked){
+    [soundCreate, soundSave, soundDelete, soundClick].forEach(audio => {
+      audio.play().catch(()=>{});
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    audioUnlocked = true;
+  }
+}, { once: true });
+
+// funzione riproduzione suoni
 function playSound(type){
-  if(!soundEnabled) return;
+  if(!soundEnabled || !audioUnlocked) return;
+  let audio;
   switch(type){
-    case "create": soundCreate.play(); break;
-    case "save":   soundSave.play(); break;
-    case "delete": soundDelete.play(); break;
-    case "click":  soundClick.play(); break;
+    case "create": audio = soundCreate; break;
+    case "save":   audio = soundSave; break;
+    case "delete": audio = soundDelete; break;
+    case "click":  audio = soundClick; break;
+  }
+  if(audio){
+    audio.currentTime = 0;
+    audio.play();
   }
 }
 
@@ -214,7 +233,6 @@ document.getElementById("saveLink").onclick=async()=>{
 
 document.getElementById("cancelLink").onclick=()=>closePopup("linkPopup");
 
-/* --- BOTTONI AGGIUNGI --- */
 document.getElementById("addReminderBtn").onclick=()=>{
   document.getElementById("reminderLabel").value="";
   document.getElementById("reminderDesc").value="";
@@ -228,5 +246,4 @@ document.getElementById("addLinkBtn").onclick=()=>{
   openPopup("linkPopup");
 };
 
-/* --- POPUP DESCRIZIONE --- */
 document.getElementById("closeDescBtn").onclick=()=>closePopup("descPopup");
