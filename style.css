@@ -91,7 +91,7 @@ header {
 }
 .addBtn:hover { background: #2575fc; }
 
-/* LISTE */
+/* LISTE - LINK E PROMEMORIA */
 ul { list-style: none; }
 li {
   display: flex;
@@ -100,13 +100,28 @@ li {
   margin-bottom: 0.6rem;
   background: #f0f0f0;
   border-radius: 12px;
+  position: relative; /* necessario per la barra colorata */
   transition: background 0.3s, transform 0.2s;
 }
 li:hover { 
   background: #e0e0e0;
   transform: translateX(3px);
 }
-li span, li a { flex: 1; cursor: pointer; }
+
+/* BARRA COLORATA PROMEMORIA */
+li.reminder::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 6px; /* piccolo dettaglio colorato */
+  border-radius: 12px 0 0 12px;
+  background: linear-gradient(180deg, #6a11cb, #2575fc);
+}
+
+/* TESTO DEI LI */
+li span, li a { flex: 1; cursor: pointer; padding-left: 0.5rem; }
 
 /* BOTTONI LISTE */
 .btnGroup button {
