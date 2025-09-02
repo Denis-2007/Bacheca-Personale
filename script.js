@@ -13,7 +13,7 @@ pinSubmit.onclick = async () => {
   if(pinInput.value===savedPin){
     pinOverlay.style.display="none";
     appContent.style.display="block";
-    listenData(); // 🔥 parte l’ascolto in tempo reale
+    listenData();
   } else {
     pinError.textContent="❌ PIN errato!";
     pinInput.value="";
@@ -27,7 +27,7 @@ darkToggle.onclick = () => {
   darkToggle.textContent=document.body.classList.contains("dark")?"☀️":"🌙";
 };
 
-/* --- FUNZIONI POPUP --- */
+/* --- POPUP --- */
 function openPopup(id){ document.getElementById(id).style.display="flex"; }
 function closePopup(id){ document.getElementById(id).style.display="none"; }
 
@@ -45,7 +45,7 @@ document.getElementById("savePin").onclick=()=>{
 document.getElementById("closeSettings").onclick=()=>closePopup("settingsPopup");
 
 /* --- SUONI --- */
-let soundEnabled = localStorage.getItem("soundEnabled") !== "false"; // default true
+let soundEnabled = localStorage.getItem("soundEnabled") !== "false";
 
 const soundCreate = document.getElementById("soundCreate");
 const soundSave   = document.getElementById("soundSave");
@@ -62,10 +62,18 @@ function playSound(type){
   }
 }
 
-// toggle bottone in impostazioni
+// toggle suoni
 const toggleSoundBtn = document.getElementById("toggleSound");
 function updateSoundBtn(){
-  toggleSoundBtn.textContent = soundEnabled ? "🔊 Attivi" : "🔇 Disattivi";
+  if(soundEnabled){
+    toggleSoundBtn.textContent = "🔊 Suoni Attivi";
+    toggleSoundBtn.classList.add("on");
+    toggleSoundBtn.classList.remove("off");
+  } else {
+    toggleSoundBtn.textContent = "🔇 Suoni Disattivi";
+    toggleSoundBtn.classList.add("off");
+    toggleSoundBtn.classList.remove("on");
+  }
 }
 updateSoundBtn();
 
@@ -83,9 +91,8 @@ let editReminderId=null;
 const linkList=document.getElementById("linkList");
 let editLinkId=null;
 
-/* --- LISTENER DATI IN TEMPO REALE --- */
+/* --- LISTENER DATI --- */
 function listenData(){
-  // PROMEMORIA
   onSnapshot(collection(db,"promemoria"), (snapshot)=>{
     reminderList.innerHTML="";
     snapshot.forEach(docSnap=>{
@@ -94,7 +101,6 @@ function listenData(){
     });
   });
 
-  // LINK
   onSnapshot(collection(db,"links"), (snapshot)=>{
     linkList.innerHTML="";
     snapshot.forEach(docSnap=>{
@@ -104,14 +110,14 @@ function listenData(){
   });
 }
 
-/* --- DOM FUNZIONI --- */
+/* --- FUNZIONI DOM --- */
 function addReminderToDOM(id,label,desc){
   const li=document.createElement("li");
   const span=document.createElement("span");
   span.textContent=label;
   span.onclick=()=>{
     document.getElementById("descContent").textContent=desc||"(Nessuna descrizione)";
-    playSound("click"); // 🔥 suono click
+    playSound("click");
     openPopup("descPopup");
   };
 
@@ -131,7 +137,7 @@ function addReminderToDOM(id,label,desc){
   delBtn.textContent="🗑️";
   delBtn.onclick=async()=>{
     await deleteDoc(doc(db,"promemoria",id));
-    playSound("delete"); // 🔥 suono elimina
+    playSound("delete");
   };
 
   btnGroup.appendChild(editBtn);
@@ -148,18 +154,17 @@ document.getElementById("saveReminder").onclick=async()=>{
 
   if(editReminderId){
     await updateDoc(doc(db,"promemoria",editReminderId),{label,desc});
-    playSound("save"); // 🔥 suono salvataggio
+    playSound("save");
     editReminderId=null;
   } else {
     await addDoc(collection(db,"promemoria"),{label,desc});
-    playSound("create"); // 🔥 suono creazione
+    playSound("create");
   }
   closePopup("reminderPopup");
 };
 
 document.getElementById("cancelReminder").onclick=()=>closePopup("reminderPopup");
 
-/* --- LINK DOM --- */
 function addLinkToDOM(id,label,url){
   const li=document.createElement("li");
   const a=document.createElement("a");
@@ -181,7 +186,7 @@ function addLinkToDOM(id,label,url){
   delBtn.textContent="🗑️";
   delBtn.onclick=async()=>{
     await deleteDoc(doc(db,"links",id));
-    playSound("delete"); // 🔥 suono elimina
+    playSound("delete");
   };
 
   btnGroup.appendChild(editBtn);
@@ -198,11 +203,11 @@ document.getElementById("saveLink").onclick=async()=>{
 
   if(editLinkId){
     await updateDoc(doc(db,"links",editLinkId),{label,url});
-    playSound("save"); // 🔥 suono salvataggio
+    playSound("save");
     editLinkId=null;
   } else {
     await addDoc(collection(db,"links"),{label,url});
-    playSound("create"); // 🔥 suono creazione
+    playSound("create");
   }
   closePopup("linkPopup");
 };
