@@ -108,21 +108,22 @@ li:hover {
   transform: translateX(2px);
 }
 
-/* PROMEMORIA - BARRA COLORATA */
+/* PROMEMORIA - CERCHIO COLORATO */
 li.reminder {
   position: relative;
-  padding-left: 20px; /* spazio per la barra */
-  overflow: hidden;
+  padding-left: 2rem; /* spazio per il cerchio */
 }
 li.reminder::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 8px; /* barra visibile */
-  border-radius: 12px 0 0 12px;
-  background: linear-gradient(180deg, #6a11cb, #2575fc);
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
 }
 
 /* TESTO DEI LI */
