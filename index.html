@@ -50,6 +50,15 @@
     </div>
   </div>
 
+  <!-- POPUP DESCRIZIONE -->
+  <div class="popup" id="viewDescPopup">
+    <div class="popup-content">
+      <h3>Descrizione</h3>
+      <p id="viewDescText"></p>
+      <button class="cancelBtn" onclick="closePopup('viewDescPopup')">Chiudi</button>
+    </div>
+  </div>
+
   <!-- POPUP LINK -->
   <div class="popup" id="linkPopup">
     <div class="popup-content">
@@ -71,17 +80,8 @@
     </div>
   </div>
 
-  <!-- POPUP DESCRIZIONE PROMEMORIA -->
-  <div class="popup" id="descPopup">
-    <div class="popup-content" id="descPopupContent">
-      <p id="descText"></p>
-      <button class="cancelBtn" onclick="closePopup('descPopup')">Chiudi</button>
-    </div>
-  </div>
-
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
-  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
 
