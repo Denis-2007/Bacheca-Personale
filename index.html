@@ -46,7 +46,7 @@
       <input type="text" id="reminderLabel" placeholder="Etichetta">
       <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
       <button class="saveBtn" id="saveReminder">Salva</button>
-      <button class="cancelBtn" id="cancelReminder">Annulla</button>
+      <button class="cancelBtn" onclick="closePopup('reminderPopup')">Annulla</button>
     </div>
   </div>
 
@@ -57,13 +57,14 @@
       <input type="text" id="label" placeholder="Etichetta">
       <input type="url" id="url" placeholder="https://...">
       <button class="saveBtn" id="saveLink">Salva</button>
-      <button class="cancelBtn" id="cancelLink">Annulla</button>
+      <button class="cancelBtn" onclick="closePopup('linkPopup')">Annulla</button>
     </div>
   </div>
 
-  <!-- POPUP DESCRIZIONE -->
+  <!-- POPUP DESCRIZIONE PROMEMORIA -->
   <div class="popup" id="descPopup">
     <div class="popup-content">
+      <h3>Descrizione</h3>
       <p id="descText"></p>
       <button class="cancelBtn" onclick="closePopup('descPopup')">Chiudi</button>
     </div>
@@ -81,7 +82,9 @@
 
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
+  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
+
 </body>
 </html>
