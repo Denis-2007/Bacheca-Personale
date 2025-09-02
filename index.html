@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- SCHERMATA PIN -->
+  <!-- PIN -->
   <div id="pinOverlay" class="pin-overlay">
     <div class="pin-box">
       <h2>🔒 Inserisci il PIN</h2>
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <!-- CONTENUTO BACHECA -->
+  <!-- CONTENUTO -->
   <div id="appContent" style="display:none;">
     <header>
       <h1>Bacheca personale</h1>
@@ -65,8 +65,8 @@
   <div class="popup" id="descPopup">
     <div class="popup-content">
       <h3>Descrizione</h3>
-      <p id="descText"></p>
-      <button class="cancelBtn" id="closeDesc">Chiudi</button>
+      <p id="descContent"></p>
+      <button id="descClose">Chiudi</button>
     </div>
   </div>
 
@@ -76,14 +76,14 @@
       <h3>⚙️ Impostazioni</h3>
       <input type="password" id="newPin" placeholder="Nuovo PIN">
       <button class="saveBtn" id="savePin">Cambia PIN</button>
-      <button class="cancelBtn" id="closeSettings">Chiudi</button>
+      <button class="cancelBtn" onclick="closePopup('settingsPopup')">Chiudi</button>
     </div>
   </div>
 
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 
-  <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
+
 </body>
 </html>
