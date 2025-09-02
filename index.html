@@ -46,7 +46,7 @@
       <input type="text" id="reminderLabel" placeholder="Etichetta">
       <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
       <button class="saveBtn" id="saveReminder">Salva</button>
-      <button class="cancelBtn" onclick="closePopup('reminderPopup')">Annulla</button>
+      <button class="cancelBtn" id="cancelReminder">Annulla</button>
     </div>
   </div>
 
@@ -57,16 +57,16 @@
       <input type="text" id="label" placeholder="Etichetta">
       <input type="url" id="url" placeholder="https://...">
       <button class="saveBtn" id="saveLink">Salva</button>
-      <button class="cancelBtn" onclick="closePopup('linkPopup')">Annulla</button>
+      <button class="cancelBtn" id="cancelLink">Annulla</button>
     </div>
   </div>
 
-  <!-- POPUP DESCRIZIONE PROMEMORIA -->
+  <!-- POPUP DESCRIZIONE -->
   <div class="popup" id="descPopup">
     <div class="popup-content">
       <h3>Descrizione</h3>
       <p id="descText"></p>
-      <button class="cancelBtn" onclick="closePopup('descPopup')">Chiudi</button>
+      <button class="cancelBtn" id="closeDesc">Chiudi</button>
     </div>
   </div>
 
@@ -76,7 +76,7 @@
       <h3>⚙️ Impostazioni</h3>
       <input type="password" id="newPin" placeholder="Nuovo PIN">
       <button class="saveBtn" id="savePin">Cambia PIN</button>
-      <button class="cancelBtn" onclick="closePopup('settingsPopup')">Chiudi</button>
+      <button class="cancelBtn" id="closeSettings">Chiudi</button>
     </div>
   </div>
 
@@ -85,6 +85,5 @@
   <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
-
 </body>
 </html>
