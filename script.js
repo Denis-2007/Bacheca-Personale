@@ -55,6 +55,21 @@ let editReminderId = null;
 const linkList = document.getElementById("linkList");
 let editLinkId = null;
 
+// --- Popup descrizione ---
+const descPopup = document.createElement("div");
+descPopup.className = "popup";
+descPopup.id = "descPopup";
+descPopup.innerHTML = `
+  <div class="popup-content">
+    <h3>Descrizione</h3>
+    <p id="descText"></p>
+    <button class="cancelBtn" id="closeDescBtn">Chiudi</button>
+  </div>
+`;
+document.body.appendChild(descPopup);
+document.getElementById("closeDescBtn").onclick = () => closePopup("descPopup");
+
+// === Carica dati ===
 async function loadAllData() {
   // Carica promemoria
   const remindersSnap = await getDocs(collection(db, "promemoria"));
@@ -77,11 +92,15 @@ async function loadAllData() {
 function addReminderToDOM(id, label, desc) {
   const li = document.createElement("li");
   li.setAttribute("data-icon", "📝");
+
+  // Assegna classe colore in base alla lunghezza della descrizione
+  if (desc.length > 50) li.classList.add("longDesc");
+  else if (desc.length > 20) li.classList.add("mediumDesc");
+  else li.classList.add("shortDesc");
+
   const span = document.createElement("span");
   span.textContent = label;
   span.style.flex = "1";
-
-  // APRI POPUP DESCRIZIONE
   span.onclick = () => {
     document.getElementById("descText").textContent = desc || "(Nessuna descrizione)";
     openPopup("descPopup");
