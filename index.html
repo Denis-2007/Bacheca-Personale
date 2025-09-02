@@ -74,13 +74,22 @@
   <div class="popup" id="settingsPopup">
     <div class="popup-content">
       <h3>⚙️ Impostazioni</h3>
+
       <input type="password" id="newPin" placeholder="Nuovo PIN">
       <button class="saveBtn" id="savePin">Cambia PIN</button>
+
+      <!-- 🔊 Toggle suoni -->
+      <button class="soundToggleBtn" id="toggleSound">Suoni</button>
+
       <button class="cancelBtn" id="closeSettings">Chiudi</button>
     </div>
   </div>
 
-  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+  <!-- SUONI -->
+  <audio id="soundCreate" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+  <audio id="soundSave" src="https://actions.google.com/sounds/v1/office/pencil_write.ogg"></audio>
+  <audio id="soundDelete" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="soundClick" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_click.ogg"></audio>
 
   <script type="module" src="firebase-init.js"></script>
   <script type="module" src="script.js"></script>
