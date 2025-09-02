@@ -125,12 +125,16 @@ li span, li a { flex: 1; cursor: pointer; }
 .saveBtn { background: #f6b93b; color: #fff; padding:0.5rem 1rem; border-radius:6px; border:none; cursor:pointer; }
 .cancelBtn { background: #e55039; color:#fff; padding:0.5rem 1rem; border-radius:6px; border:none; cursor:pointer; }
 
-/* POPUP DESCRIZIONE */
+/* POPUP DESCRIZIONE (nuovo look moderno) */
 #descContent {
   max-height: 250px;
   overflow-y: auto;
-  padding: 0.5rem;
-  line-height: 1.5;
+  padding: 1rem;
+  line-height: 1.6;
+  background: #fff8e1;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  margin-bottom: 0.5rem;
 }
 #descContent p {
   margin-bottom: 0.7rem;
