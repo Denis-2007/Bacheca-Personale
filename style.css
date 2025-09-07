@@ -100,7 +100,11 @@ li:hover {
   background: #e0e0e0;
   transform: translateX(2px);
 }
-li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
+li span, li a {
+  flex: 1;
+  cursor: pointer;
+  font-weight: 500;
+}
 
 /* BOTTONI LISTE */
 .btnGroup button {
@@ -116,7 +120,7 @@ li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
   transform: scale(1.2);
 }
 
-/* --- POPUP GENERICO --- */
+/* --- POPUP --- */
 .popup {
   position: fixed;
   top: 0; left: 0;
@@ -131,29 +135,44 @@ li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
   background: #fff;
   padding: 2rem;
   border-radius: 20px;
-  width: 360px;
+  width: 400px;
   max-width: 90%;
   display: flex;
   flex-direction: column;
   box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-  animation: popupFade 0.3s ease-out;
-}
-@keyframes popupFade {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
 }
 .popup-content input,
-.popup-content textarea {
+.popup-content textarea,
+.popup-content .editable {
   width: 100%;
   padding: 0.6rem;
   margin-bottom: 1rem;
   border-radius: 12px;
   border: 1px solid #ccc;
   font-size: 1rem;
-  transition: border 0.3s;
+  min-height: 80px;
 }
-.popup-content input:focus,
-.popup-content textarea:focus { border-color: #6a11cb; outline: none; }
+.editable {
+  background: #fafafa;
+  outline: none;
+  white-space: pre-wrap;
+}
+.editor-tools {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.editor-tools button {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.editor-tools button.active {
+  outline: 2px solid black;
+}
+
+/* --- BOTTONI POPUP --- */
 .saveBtn {
   background: #6a11cb;
   color: #fff;
@@ -162,11 +181,6 @@ li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
   border: none;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.3s, transform 0.2s;
-}
-.saveBtn:hover {
-  background: #2575fc;
-  transform: scale(1.05);
 }
 .cancelBtn {
   background: #fc5c7d;
@@ -176,26 +190,33 @@ li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
   border: none;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.3s, transform 0.2s;
-}
-.cancelBtn:hover {
-  background: #ff758c;
-  transform: scale(1.05);
+  margin-top: 0.5rem;
 }
 
-/* POPUP DESCRIZIONE */
-#descContent {
-  max-height: 250px;
-  overflow-y: auto;
-  padding: 1rem;
-  line-height: 1.6;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: inset 0 4px 8px rgba(0,0,0,0.05);
-  margin-bottom: 1rem;
+/* --- TRIANGOLO IDEE --- */
+.triangle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: yellow;
+  color: black;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.triangle-btn:hover {
+  transform: scale(1.1);
 }
 
-/* PIN OVERLAY */
+/* --- PIN --- */
 .pin-overlay {
   position: fixed;
   top:0; left:0;
@@ -214,11 +235,15 @@ li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
   width: 320px;
   box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
-.pin-box input { width: 100%; padding:0.6rem; margin:0.7rem 0; border-radius:12px; border:1px solid #ccc; }
-.pin-box button { padding:0.6rem 1rem; border:none; background:#6a11cb; color:#fff; border-radius:12px; cursor:pointer; font-weight:600; transition: background 0.3s, transform 0.2s; }
-.pin-box button:hover { background: #2575fc; transform: scale(1.05); }
+.pin-box input {
+  width: 100%;
+  padding:0.6rem;
+  margin:0.7rem 0;
+  border-radius:12px;
+  border:1px solid #ccc;
+}
 
-/* TOGGLE SUONI */
+/* --- SUONI --- */
 .soundToggleBtn {
   padding: 0.6rem 1.2rem;
   border: none;
@@ -227,57 +252,11 @@ li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
   cursor: pointer;
   background: #6a11cb;
   color: #fff;
-  transition: background 0.3s, transform 0.2s;
 }
-.soundToggleBtn:hover { transform: scale(1.05); }
 .soundToggleBtn.on { background: #28a745; }
 .soundToggleBtn.off { background: #dc3545; }
 
-/* Bottone triangolo idee */
-#ideaBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  background: yellow;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  font-weight: bold;
-  color: black;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-  z-index: 999;
-  transition: transform 0.2s;
-}
-#ideaBtn:hover { transform: scale(1.1); }
-
-/* Popup Idee */
-#ideaPopup .popup-content { width: 400px; }
-
-/* Toolbar editor */
-.editor-toolbar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.editor-toolbar button {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  background: #eee;
-  font-size: 14px;
-}
-.editor-toolbar button.active {
-  border: 2px solid #2575fc;
-  background: #d0e4ff;
-}
-
-/* MEDIA QUERY */
+/* --- MEDIA --- */
 @media (max-width: 500px) {
   header { flex-direction: column; align-items: flex-start; padding: 1rem; }
   .container { margin: 1rem; }
