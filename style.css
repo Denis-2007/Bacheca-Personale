@@ -1,4 +1,176 @@
-/* Bottone triangolare in basso a destra */
+/* --- RESET BASE --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  background: #f5f5f5;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.4s, color 0.4s;
+}
+
+/* --- DARK MODE --- */
+body.dark {
+  background: #1e1e1e;
+  color: #eee;
+}
+
+/* --- HEADER --- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.header-actions button {
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  transition: background 0.3s, transform 0.2s;
+}
+.header-actions button:hover {
+  background: rgba(255,255,255,0.35);
+  transform: scale(1.05);
+}
+
+/* --- CONTAINER --- */
+.container {
+  margin: 2rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+}
+.container h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #444;
+}
+.addBtn {
+  cursor: pointer;
+  font-size: 1.2rem;
+  border: none;
+  background: #6a11cb;
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.3rem 0.8rem;
+  transition: background 0.3s, transform 0.2s;
+}
+.addBtn:hover {
+  background: #2575fc;
+  transform: scale(1.1);
+}
+
+/* --- LISTE --- */
+ul { list-style: none; }
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+  background: #f0f0f0;
+  border-radius: 12px;
+  transition: background 0.3s, transform 0.2s;
+}
+li:hover {
+  background: #e0e0e0;
+  transform: translateX(2px);
+}
+
+/* BOTTONI LISTE */
+.btnGroup button {
+  margin-left: 0.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.2s, transform 0.2s;
+}
+.btnGroup button:hover {
+  color: #6a11cb;
+  transform: scale(1.2);
+}
+
+/* --- POPUP GENERICO --- */
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+.popup-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 400px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  animation: popupFade 0.3s ease-out;
+}
+@keyframes popupFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.popup-content input,
+.popup-content textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+.popup-content input:focus,
+.popup-content textarea:focus { border-color: #6a11cb; outline: none; }
+.saveBtn, .cancelBtn {
+  margin-top: 0.4rem;
+}
+
+/* POPUP DESCRIZIONE */
+#descContent {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 1rem;
+  line-height: 1.6;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: inset 0 4px 8px rgba(0,0,0,0.05);
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+
+/* Bottone triangolare */
 .triangle-btn {
   position: fixed;
   bottom: 20px;
@@ -39,8 +211,9 @@
 }
 .dropdown li { padding: 0.4rem; cursor: pointer; }
 .dropdown li ul { margin-left: 1rem; }
+.hidden { display: none; }
 
-/* Toolbar di formattazione */
+/* Toolbar */
 .toolbar {
   display: flex;
   gap: 8px;
@@ -56,11 +229,11 @@
 
 /* Editor descrizione */
 .editable {
-  min-height: 100px;
+  min-height: 120px;
   border: 1px solid #ccc;
   border-radius: 12px;
   padding: 0.6rem;
   font-size: 1rem;
   background: #fff;
-  white-space: pre-wrap; /* mantiene gli "a capo" */
+  white-space: pre-wrap;
 }
