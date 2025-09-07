@@ -45,6 +45,12 @@
       <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
       <ul id="linkList"></ul>
     </div>
+
+    <!-- Lista Idee -->
+    <div class="container">
+      <h2>Idee miglioramento</h2>
+      <ul id="ideaList"></ul>
+    </div>
   </div>
 
   <!-- POPUP PROMEMORIA -->
@@ -52,16 +58,7 @@
     <div class="popup-content">
       <h3>Nuovo promemoria</h3>
       <input type="text" id="reminderLabel" placeholder="Etichetta">
-
-      <!-- Toolbar + editor -->
-      <div class="toolbar" id="formatToolbar">
-        <button onclick="document.execCommand('bold',false,null)">B</button>
-        <button onclick="highlight('yellow')">🟨</button>
-        <button onclick="highlight('lightblue')">🟦</button>
-        <button onclick="highlight('violet')">🟪</button>
-      </div>
-      <div id="reminderDescEditable" contenteditable="true" class="editable"></div>
-
+      <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
       <button class="saveBtn" id="saveReminder">Salva</button>
       <button class="cancelBtn" id="cancelReminder">Annulla</button>
     </div>
@@ -98,53 +95,33 @@
     </div>
   </div>
 
-  <!-- POPUP MIGLIORIE -->
-  <div class="popup" id="improvementsPopup">
+  <!-- POPUP IDEE -->
+  <div class="popup" id="ideaPopup">
     <div class="popup-content">
-      <h3>💡 Idee per migliorie</h3>
-      <ul>
-        <li>🔹 Possibilità di categorie e sottocategorie nei promemoria</li>
-        <li>🔹 Evidenziatore multicolore</li>
-        <li>🔹 Migliore formattazione descrizioni (grassetto, a capo)</li>
-        <li>🔹 Interfacce più grandi e intuitive</li>
-      </ul>
-      <button class="cancelBtn" onclick="closePopup('improvementsPopup')">Chiudi</button>
+      <h3>💡 Nuova Idea</h3>
+      <input type="text" id="ideaLabel" placeholder="Titolo idea">
+
+      <div class="editor-toolbar">
+        <button id="boldBtn"><b>B</b></button>
+        <button id="highlightYellow" style="background:yellow">🖍</button>
+        <button id="highlightBlue" style="background:lightblue">🖍</button>
+        <button id="highlightViolet" style="background:violet">🖍</button>
+      </div>
+
+      <textarea id="ideaDesc" placeholder="Descrizione idea..."></textarea>
+      <button class="saveBtn" id="saveIdea">Salva</button>
+      <button class="cancelBtn" id="cancelIdea">Annulla</button>
     </div>
   </div>
+
+  <!-- Bottone triangolo -->
+  <div id="ideaBtn">!</div>
 
   <!-- SUONI -->
   <audio id="soundCreate" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
   <audio id="soundSave" src="https://actions.google.com/sounds/v1/office/pencil_write.ogg"></audio>
   <audio id="soundDelete" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   <audio id="soundClick" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_click.ogg"></audio>
-
-  <!-- BOTTONO TRIANGOLARE -->
-  <div id="improvementsBtn" class="triangle-btn"></div>
-
-  <!-- BOTTONO CATEGORIE -->
-  <div id="categoriesMenu" class="categories-menu">
-    <button id="categoryBtn">📂 Categorie</button>
-    <ul id="categoryDropdown" class="dropdown hidden">
-      <li>🏷️ Lavoro
-        <ul>
-          <li>Progetti</li>
-          <li>Scadenze</li>
-        </ul>
-      </li>
-      <li>📖 Studio
-        <ul>
-          <li>Appunti</li>
-          <li>Esami</li>
-        </ul>
-      </li>
-      <li>🏡 Personale
-        <ul>
-          <li>Spesa</li>
-          <li>Allenamento</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
 
   <!-- SCRIPT -->
   <script type="module" src="firebase-init.js"></script>
