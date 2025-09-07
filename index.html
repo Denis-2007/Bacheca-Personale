@@ -36,19 +36,21 @@
       </div>
     </header>
 
+    <!-- Promemoria -->
     <div class="container">
       <h2>Promemoria <button class="addBtn" id="addReminderBtn">+</button></h2>
       <ul id="reminderList"></ul>
     </div>
 
+    <!-- Link -->
     <div class="container">
       <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
       <ul id="linkList"></ul>
     </div>
 
-    <!-- Lista Idee -->
+    <!-- Idee -->
     <div class="container">
-      <h2>Idee miglioramento</h2>
+      <h2>Idee di miglioramento <button class="addBtn" id="ideaBtn">+</button></h2>
       <ul id="ideaList"></ul>
     </div>
   </div>
@@ -58,7 +60,13 @@
     <div class="popup-content">
       <h3>Nuovo promemoria</h3>
       <input type="text" id="reminderLabel" placeholder="Etichetta">
-      <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
+      <div class="editor-tools">
+        <button id="boldBtn">B</button>
+        <button id="highlightYellow" style="background:yellow;">🖍</button>
+        <button id="highlightBlue" style="background:lightblue;">🖍</button>
+        <button id="highlightViolet" style="background:violet;">🖍</button>
+      </div>
+      <div id="reminderDesc" class="editable" contenteditable="true"></div>
       <button class="saveBtn" id="saveReminder">Salva</button>
       <button class="cancelBtn" id="cancelReminder">Annulla</button>
     </div>
@@ -72,6 +80,17 @@
       <input type="url" id="url" placeholder="https://...">
       <button class="saveBtn" id="saveLink">Salva</button>
       <button class="cancelBtn" id="cancelLink">Annulla</button>
+    </div>
+  </div>
+
+  <!-- POPUP IDEE -->
+  <div class="popup" id="ideaPopup">
+    <div class="popup-content">
+      <h3>Nuova idea</h3>
+      <input type="text" id="ideaLabel" placeholder="Titolo idea">
+      <div id="ideaDesc" class="editable" contenteditable="true"></div>
+      <button class="saveBtn" id="saveIdea">Salva</button>
+      <button class="cancelBtn" id="cancelIdea">Annulla</button>
     </div>
   </div>
 
@@ -95,27 +114,8 @@
     </div>
   </div>
 
-  <!-- POPUP IDEE -->
-  <div class="popup" id="ideaPopup">
-    <div class="popup-content">
-      <h3>💡 Nuova Idea</h3>
-      <input type="text" id="ideaLabel" placeholder="Titolo idea">
-
-      <div class="editor-toolbar">
-        <button id="boldBtn"><b>B</b></button>
-        <button id="highlightYellow" style="background:yellow">🖍</button>
-        <button id="highlightBlue" style="background:lightblue">🖍</button>
-        <button id="highlightViolet" style="background:violet">🖍</button>
-      </div>
-
-      <textarea id="ideaDesc" placeholder="Descrizione idea..."></textarea>
-      <button class="saveBtn" id="saveIdea">Salva</button>
-      <button class="cancelBtn" id="cancelIdea">Annulla</button>
-    </div>
-  </div>
-
-  <!-- Bottone triangolo -->
-  <div id="ideaBtn">!</div>
+  <!-- BOTTONE IDEE (triangolo giallo con !) -->
+  <button id="triangleBtn" class="triangle-btn">⚠️</button>
 
   <!-- SUONI -->
   <audio id="soundCreate" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
