@@ -1,187 +1,228 @@
-import { db } from './firebase-init.js';
-import { collection, addDoc, updateDoc, doc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { db } from "./firebase-init.js";
+import {
+  collection, addDoc, deleteDoc, updateDoc, doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-/* --- PIN --- */
-let savedPin = localStorage.getItem("userPIN") || "1234";
-const pinOverlay = document.getElementById("pinOverlay");
-const pinInput = document.getElementById("pinInput");
-const pinSubmit = document.getElementById("pinSubmit");
-const pinError = document.getElementById("pinError");
-const appContent = document.getElementById("appContent");
-
-pinSubmit.onclick = async () => {
-  if(pinInput.value===savedPin){
-    pinOverlay.style.display="none";
-    appContent.style.display="block";
-    listenData();
-  } else {
-    pinError.textContent="❌ PIN errato!";
-    pinInput.value="";
-  }
-};
-
-/* --- DARK MODE --- */
-const darkToggle = document.getElementById("darkModeToggle");
-darkToggle.onclick = () => {
-  document.body.classList.toggle("dark");
-  darkToggle.textContent=document.body.classList.contains("dark")?"☀️":"🌙";
-};
-
-/* --- POPUP --- */
-function openPopup(id){ document.getElementById(id).style.display="flex"; }
-function closePopup(id){ document.getElementById(id).style.display="none"; }
-window.closePopup = closePopup;
-
-/* --- SETTINGS PIN --- */
-document.getElementById("settingsBtn").onclick=()=>openPopup("settingsPopup");
-document.getElementById("savePin").onclick=()=>{
-  const newPin=document.getElementById("newPin").value;
-  if(newPin.trim()!==""){
-    savedPin=newPin;
-    localStorage.setItem("userPIN",newPin);
-    alert("✅ PIN cambiato!");
-    closePopup("settingsPopup");
-  }
-};
-document.getElementById("closeSettings").onclick=()=>closePopup("settingsPopup");
+/* --- VARIABILI GLOBALI --- */
+const reminderList = document.getElementById("reminderList");
+const linkList = document.getElementById("linkList");
+const ideaList = document.getElementById("ideaList");
+let editingIdeaId = null;
+let editingReminderId = null;
 
 /* --- SUONI --- */
-let soundEnabled = localStorage.getItem("soundEnabled") !== "false";
-let audioUnlocked = false;
-
-const soundCreate = document.getElementById("soundCreate");
-const soundSave   = document.getElementById("soundSave");
-const soundDelete = document.getElementById("soundDelete");
-const soundClick  = document.getElementById("soundClick");
-
-document.body.addEventListener("click", () => {
-  if(!audioUnlocked){
-    [soundCreate, soundSave, soundDelete, soundClick].forEach(audio => {
-      audio.play().catch(()=>{});
-      audio.pause();
-      audio.currentTime = 0;
-    });
-    audioUnlocked = true;
-  }
-}, { once: true });
-
-function playSound(type){
-  if(!soundEnabled || !audioUnlocked) return;
-  let audio;
-  switch(type){
-    case "create": audio = soundCreate; break;
-    case "save":   audio = soundSave; break;
-    case "delete": audio = soundDelete; break;
-    case "click":  audio = soundClick; break;
-  }
-  if(audio){
-    audio.currentTime = 0;
-    audio.play();
+function playSound(type) {
+  if (!soundsOn) return;
+  const sounds = {
+    create: document.getElementById("soundCreate"),
+    save: document.getElementById("soundSave"),
+    delete: document.getElementById("soundDelete"),
+    click: document.getElementById("soundClick"),
+  };
+  if (sounds[type]) {
+    sounds[type].currentTime = 0;
+    sounds[type].play();
   }
 }
-const toggleSoundBtn = document.getElementById("toggleSound");
-function updateSoundBtn(){
-  if(soundEnabled){
-    toggleSoundBtn.textContent = "🔊 Suoni Attivi";
-    toggleSoundBtn.classList.add("on");
-    toggleSoundBtn.classList.remove("off");
+let soundsOn = true;
+
+/* --- POPUP --- */
+function openPopup(id) {
+  document.getElementById(id).style.display = "flex";
+}
+function closePopup(id) {
+  document.getElementById(id).style.display = "none";
+  if (id === "ideaPopup") {
+    document.getElementById("ideaLabel").value = "";
+    document.getElementById("ideaDesc").value = "";
+    editingIdeaId = null;
+  }
+  if (id === "reminderPopup") {
+    document.getElementById("reminderLabel").value = "";
+    document.getElementById("reminderDesc").value = "";
+    editingReminderId = null;
+  }
+}
+
+/* --- LOGIN PIN --- */
+const pinOverlay = document.getElementById("pinOverlay");
+const pinSubmit = document.getElementById("pinSubmit");
+const pinError = document.getElementById("pinError");
+pinSubmit.onclick = () => {
+  const pinInput = document.getElementById("pinInput").value;
+  const savedPin = localStorage.getItem("bachecaPin") || "1234";
+  if (pinInput === savedPin) {
+    pinOverlay.style.display = "none";
+    document.getElementById("appContent").style.display = "block";
+    playSound("click");
   } else {
-    toggleSoundBtn.textContent = "🔇 Suoni Disattivi";
-    toggleSoundBtn.classList.add("off");
-    toggleSoundBtn.classList.remove("on");
+    pinError.textContent = "❌ PIN errato";
   }
-}
-updateSoundBtn();
-toggleSoundBtn.onclick = ()=>{
-  soundEnabled = !soundEnabled;
-  localStorage.setItem("soundEnabled", soundEnabled);
-  updateSoundBtn();
 };
 
-/* --- REMINDERS FIREBASE --- */
-const reminderList=document.getElementById("reminderList");
-document.getElementById("addReminderBtn").onclick=()=>openPopup("reminderPopup");
-document.getElementById("cancelReminder").onclick=()=>closePopup("reminderPopup");
-document.getElementById("saveReminder").onclick=async ()=>{
-  const label=document.getElementById("reminderLabel").value;
-  const desc=document.getElementById("reminderDescEditable").innerHTML;
-  if(label.trim()!==""){
-    await addDoc(collection(db,"reminders"),{label,desc});
+/* --- PROMEMORIA --- */
+document.getElementById("addReminderBtn").onclick = () => openPopup("reminderPopup");
+document.getElementById("cancelReminder").onclick = () => closePopup("reminderPopup");
+
+document.getElementById("saveReminder").onclick = async () => {
+  const label = document.getElementById("reminderLabel").value;
+  const desc = document.getElementById("reminderDesc").value;
+  if (label.trim() !== "") {
+    if (editingReminderId) {
+      await updateDoc(doc(db, "reminders", editingReminderId), { label, desc });
+    } else {
+      await addDoc(collection(db, "reminders"), { label, desc });
+    }
     playSound("save");
     closePopup("reminderPopup");
   }
 };
 
-/* --- LINKS FIREBASE --- */
-const linkList=document.getElementById("linkList");
-document.getElementById("addLinkBtn").onclick=()=>openPopup("linkPopup");
-document.getElementById("cancelLink").onclick=()=>closePopup("linkPopup");
-document.getElementById("saveLink").onclick=async ()=>{
-  const label=document.getElementById("label").value;
-  const url=document.getElementById("url").value;
-  if(label.trim()!==""&&url.trim()!==""){
-    await addDoc(collection(db,"links"),{label,url});
+window.deleteReminder = async (id) => {
+  await deleteDoc(doc(db, "reminders", id));
+  playSound("delete");
+};
+window.editReminder = (id, label, desc) => {
+  editingReminderId = id;
+  document.getElementById("reminderLabel").value = label;
+  document.getElementById("reminderDesc").value = desc;
+  openPopup("reminderPopup");
+};
+
+/* --- LINKS --- */
+document.getElementById("addLinkBtn").onclick = () => openPopup("linkPopup");
+document.getElementById("cancelLink").onclick = () => closePopup("linkPopup");
+
+document.getElementById("saveLink").onclick = async () => {
+  const label = document.getElementById("label").value;
+  const url = document.getElementById("url").value;
+  if (label.trim() !== "" && url.trim() !== "") {
+    await addDoc(collection(db, "links"), { label, url });
     playSound("save");
     closePopup("linkPopup");
   }
 };
 
-/* --- MOSTRA DESCRIZIONE --- */
-const descPopup=document.getElementById("descPopup");
-const descContent=document.getElementById("descContent");
-document.getElementById("closeDescBtn").onclick=()=>closePopup("descPopup");
+window.deleteLink = async (id) => {
+  await deleteDoc(doc(db, "links", id));
+  playSound("delete");
+};
 
-/* --- FIREBASE LISTENER --- */
-function listenData(){
-  onSnapshot(collection(db,"reminders"),snapshot=>{
-    reminderList.innerHTML="";
-    snapshot.forEach(docSnap=>{
-      const r=docSnap.data();
-      const li=document.createElement("li");
-      li.innerHTML=`<span>${r.label}</span>
-      <div class="btnGroup">
-        <button onclick="showDesc(\`${r.desc}\`)">👁️</button>
-        <button onclick="deleteReminder('${docSnap.id}')">🗑️</button>
-      </div>`;
+/* --- IDEE --- */
+const ideaBtn = document.getElementById("ideaBtn");
+ideaBtn.onclick = () => openPopup("ideaPopup");
+document.getElementById("cancelIdea").onclick = () => closePopup("ideaPopup");
+
+document.getElementById("saveIdea").onclick = async () => {
+  const label = document.getElementById("ideaLabel").value;
+  const desc = document.getElementById("ideaDesc").value;
+  if (label.trim() !== "") {
+    if (editingIdeaId) {
+      await updateDoc(doc(db, "ideas", editingIdeaId), { label, desc });
+    } else {
+      await addDoc(collection(db, "ideas"), { label, desc });
+    }
+    playSound("save");
+    closePopup("ideaPopup");
+  }
+};
+
+window.deleteIdea = async (id) => {
+  await deleteDoc(doc(db, "ideas", id));
+  playSound("delete");
+};
+window.editIdea = (id, label, desc) => {
+  editingIdeaId = id;
+  document.getElementById("ideaLabel").value = label;
+  document.getElementById("ideaDesc").value = desc;
+  openPopup("ideaPopup");
+};
+
+/* --- LISTENER FIREBASE --- */
+function listenData() {
+  onSnapshot(collection(db, "reminders"), (snapshot) => {
+    reminderList.innerHTML = "";
+    snapshot.forEach((docSnap) => {
+      const r = docSnap.data();
+      const li = document.createElement("li");
+      li.innerHTML = `<span>${r.label}</span>
+        <div class="btnGroup">
+          <button onclick="editReminder('${docSnap.id}','${r.label}','${r.desc||""}')">✏️</button>
+          <button onclick="deleteReminder('${docSnap.id}')">🗑️</button>
+        </div>`;
       reminderList.appendChild(li);
     });
   });
 
-  onSnapshot(collection(db,"links"),snapshot=>{
-    linkList.innerHTML="";
-    snapshot.forEach(docSnap=>{
-      const l=docSnap.data();
-      const li=document.createElement("li");
-      li.innerHTML=`<a href="${l.url}" target="_blank">${l.label}</a>
-      <div class="btnGroup">
-        <button onclick="deleteLink('${docSnap.id}')">🗑️</button>
-      </div>`;
+  onSnapshot(collection(db, "links"), (snapshot) => {
+    linkList.innerHTML = "";
+    snapshot.forEach((docSnap) => {
+      const l = docSnap.data();
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="${l.url}" target="_blank">${l.label}</a>
+        <div class="btnGroup">
+          <button onclick="deleteLink('${docSnap.id}')">🗑️</button>
+        </div>`;
       linkList.appendChild(li);
     });
   });
+
+  onSnapshot(collection(db, "ideas"), (snapshot) => {
+    ideaList.innerHTML = "";
+    snapshot.forEach((docSnap) => {
+      const i = docSnap.data();
+      const li = document.createElement("li");
+      li.innerHTML = `<span>${i.label}</span>
+        <div class="btnGroup">
+          <button onclick="editIdea('${docSnap.id}','${i.label}','${i.desc||""}')">✏️</button>
+          <button onclick="deleteIdea('${docSnap.id}')">🗑️</button>
+        </div>`;
+      ideaList.appendChild(li);
+    });
+  });
 }
-window.showDesc=(desc)=>{
-  descContent.innerHTML=desc;
-  openPopup("descPopup");
-};
-window.deleteReminder=async(id)=>{
-  await deleteDoc(doc(db,"reminders",id));
-  playSound("delete");
-};
-window.deleteLink=async(id)=>{
-  await deleteDoc(doc(db,"links",id));
-  playSound("delete");
+listenData();
+
+/* --- FORMATTATORE TESTO --- */
+const boldBtn = document.getElementById("boldBtn");
+const highlightYellow = document.getElementById("highlightYellow");
+const highlightBlue = document.getElementById("highlightBlue");
+const highlightViolet = document.getElementById("highlightViolet");
+
+function toggleFormat(button, command, value = null) {
+  if (document.queryCommandState(command)) {
+    document.execCommand(command, false, value);
+    button.classList.remove("active");
+  } else {
+    document.execCommand(command, false, value);
+    button.classList.add("active");
+  }
+}
+
+boldBtn.onclick = () => toggleFormat(boldBtn, "bold");
+highlightYellow.onclick = () => toggleFormat(highlightYellow, "hiliteColor", "yellow");
+highlightBlue.onclick = () => toggleFormat(highlightBlue, "hiliteColor", "lightblue");
+highlightViolet.onclick = () => toggleFormat(highlightViolet, "hiliteColor", "violet");
+
+/* --- DARK MODE --- */
+document.getElementById("darkModeToggle").onclick = () => {
+  document.body.classList.toggle("dark");
 };
 
-/* --- FORMATTAZIONE TESTO --- */
-window.highlight=(color)=>{
-  document.execCommand("hiliteColor",false,color);
+/* --- IMPOSTAZIONI --- */
+document.getElementById("settingsBtn").onclick = () => openPopup("settingsPopup");
+document.getElementById("closeSettings").onclick = () => closePopup("settingsPopup");
+document.getElementById("savePin").onclick = () => {
+  const newPin = document.getElementById("newPin").value;
+  if (newPin.trim() !== "") {
+    localStorage.setItem("bachecaPin", newPin);
+    alert("🔑 PIN aggiornato!");
+  }
 };
-
-/* --- MIGLIORIE + CATEGORIE --- */
-document.getElementById("improvementsBtn").onclick=()=>openPopup("improvementsPopup");
-const categoryBtn=document.getElementById("categoryBtn");
-const categoryDropdown=document.getElementById("categoryDropdown");
-categoryBtn.onclick=()=>{
-  categoryDropdown.classList.toggle("hidden");
+document.getElementById("toggleSound").onclick = function () {
+  soundsOn = !soundsOn;
+  this.classList.toggle("on", soundsOn);
+  this.classList.toggle("off", !soundsOn);
+  this.textContent = soundsOn ? "🔊 Suoni Attivi" : "🔇 Suoni Disattivi";
 };
