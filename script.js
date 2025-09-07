@@ -30,6 +30,7 @@ darkToggle.onclick = () => {
 /* --- POPUP --- */
 function openPopup(id){ document.getElementById(id).style.display="flex"; }
 function closePopup(id){ document.getElementById(id).style.display="none"; }
+window.closePopup = closePopup;
 
 /* --- SETTINGS PIN --- */
 document.getElementById("settingsBtn").onclick=()=>openPopup("settingsPopup");
@@ -53,7 +54,6 @@ const soundSave   = document.getElementById("soundSave");
 const soundDelete = document.getElementById("soundDelete");
 const soundClick  = document.getElementById("soundClick");
 
-// sblocca audio al primo click dell'utente
 document.body.addEventListener("click", () => {
   if(!audioUnlocked){
     [soundCreate, soundSave, soundDelete, soundClick].forEach(audio => {
@@ -65,7 +65,6 @@ document.body.addEventListener("click", () => {
   }
 }, { once: true });
 
-// funzione riproduzione suoni
 function playSound(type){
   if(!soundEnabled || !audioUnlocked) return;
   let audio;
@@ -80,8 +79,6 @@ function playSound(type){
     audio.play();
   }
 }
-
-// toggle suoni
 const toggleSoundBtn = document.getElementById("toggleSound");
 function updateSoundBtn(){
   if(soundEnabled){
@@ -95,155 +92,96 @@ function updateSoundBtn(){
   }
 }
 updateSoundBtn();
-
 toggleSoundBtn.onclick = ()=>{
   soundEnabled = !soundEnabled;
   localStorage.setItem("soundEnabled", soundEnabled);
   updateSoundBtn();
 };
 
-/* --- PROMEMORIA --- */
+/* --- REMINDERS FIREBASE --- */
 const reminderList=document.getElementById("reminderList");
-let editReminderId=null;
-
-/* --- LINK --- */
-const linkList=document.getElementById("linkList");
-let editLinkId=null;
-
-/* --- LISTENER DATI --- */
-function listenData(){
-  onSnapshot(collection(db,"promemoria"), (snapshot)=>{
-    reminderList.innerHTML="";
-    snapshot.forEach(docSnap=>{
-      const data=docSnap.data();
-      addReminderToDOM(docSnap.id,data.label,data.desc);
-    });
-  });
-
-  onSnapshot(collection(db,"links"), (snapshot)=>{
-    linkList.innerHTML="";
-    snapshot.forEach(docSnap=>{
-      const data=docSnap.data();
-      addLinkToDOM(docSnap.id,data.label,data.url);
-    });
-  });
-}
-
-/* --- FUNZIONI DOM --- */
-function addReminderToDOM(id,label,desc){
-  const li=document.createElement("li");
-  const span=document.createElement("span");
-  span.textContent=label;
-  span.onclick=()=>{
-    document.getElementById("descContent").textContent=desc||"(Nessuna descrizione)";
-    playSound("click");
-    openPopup("descPopup");
-  };
-
-  const btnGroup=document.createElement("div");
-  btnGroup.className="btnGroup";
-
-  const editBtn=document.createElement("button");
-  editBtn.textContent="✏️";
-  editBtn.onclick=()=>{
-    document.getElementById("reminderLabel").value=label;
-    document.getElementById("reminderDesc").value=desc;
-    editReminderId=id;
-    openPopup("reminderPopup");
-  };
-
-  const delBtn=document.createElement("button");
-  delBtn.textContent="🗑️";
-  delBtn.onclick=async()=>{
-    await deleteDoc(doc(db,"promemoria",id));
-    playSound("delete");
-  };
-
-  btnGroup.appendChild(editBtn);
-  btnGroup.appendChild(delBtn);
-  li.appendChild(span);
-  li.appendChild(btnGroup);
-  reminderList.appendChild(li);
-}
-
-document.getElementById("saveReminder").onclick=async()=>{
+document.getElementById("addReminderBtn").onclick=()=>openPopup("reminderPopup");
+document.getElementById("cancelReminder").onclick=()=>closePopup("reminderPopup");
+document.getElementById("saveReminder").onclick=async ()=>{
   const label=document.getElementById("reminderLabel").value;
-  const desc=document.getElementById("reminderDesc").value;
-  if(!label.trim()) return;
-
-  if(editReminderId){
-    await updateDoc(doc(db,"promemoria",editReminderId),{label,desc});
+  const desc=document.getElementById("reminderDescEditable").innerHTML;
+  if(label.trim()!==""){
+    await addDoc(collection(db,"reminders"),{label,desc});
     playSound("save");
-    editReminderId=null;
-  } else {
-    await addDoc(collection(db,"promemoria"),{label,desc});
-    playSound("create");
+    closePopup("reminderPopup");
   }
-  closePopup("reminderPopup");
 };
 
-document.getElementById("cancelReminder").onclick=()=>closePopup("reminderPopup");
-
-function addLinkToDOM(id,label,url){
-  const li=document.createElement("li");
-  const a=document.createElement("a");
-  a.href=url; a.target="_blank"; a.textContent=label;
-
-  const btnGroup=document.createElement("div");
-  btnGroup.className="btnGroup";
-
-  const editBtn=document.createElement("button");
-  editBtn.textContent="✏️";
-  editBtn.onclick=()=>{
-    document.getElementById("label").value=label;
-    document.getElementById("url").value=url;
-    editLinkId=id;
-    openPopup("linkPopup");
-  };
-
-  const delBtn=document.createElement("button");
-  delBtn.textContent="🗑️";
-  delBtn.onclick=async()=>{
-    await deleteDoc(doc(db,"links",id));
-    playSound("delete");
-  };
-
-  btnGroup.appendChild(editBtn);
-  btnGroup.appendChild(delBtn);
-  li.appendChild(a);
-  li.appendChild(btnGroup);
-  linkList.appendChild(li);
-}
-
-document.getElementById("saveLink").onclick=async()=>{
+/* --- LINKS FIREBASE --- */
+const linkList=document.getElementById("linkList");
+document.getElementById("addLinkBtn").onclick=()=>openPopup("linkPopup");
+document.getElementById("cancelLink").onclick=()=>closePopup("linkPopup");
+document.getElementById("saveLink").onclick=async ()=>{
   const label=document.getElementById("label").value;
   const url=document.getElementById("url").value;
-  if(!label.trim() || !url.trim()) return;
-
-  if(editLinkId){
-    await updateDoc(doc(db,"links",editLinkId),{label,url});
-    playSound("save");
-    editLinkId=null;
-  } else {
+  if(label.trim()!==""&&url.trim()!==""){
     await addDoc(collection(db,"links"),{label,url});
-    playSound("create");
+    playSound("save");
+    closePopup("linkPopup");
   }
-  closePopup("linkPopup");
 };
 
-document.getElementById("cancelLink").onclick=()=>closePopup("linkPopup");
-
-document.getElementById("addReminderBtn").onclick=()=>{
-  document.getElementById("reminderLabel").value="";
-  document.getElementById("reminderDesc").value="";
-  editReminderId=null;
-  openPopup("reminderPopup");
-};
-document.getElementById("addLinkBtn").onclick=()=>{
-  document.getElementById("label").value="";
-  document.getElementById("url").value="";
-  editLinkId=null;
-  openPopup("linkPopup");
-};
-
+/* --- MOSTRA DESCRIZIONE --- */
+const descPopup=document.getElementById("descPopup");
+const descContent=document.getElementById("descContent");
 document.getElementById("closeDescBtn").onclick=()=>closePopup("descPopup");
+
+/* --- FIREBASE LISTENER --- */
+function listenData(){
+  onSnapshot(collection(db,"reminders"),snapshot=>{
+    reminderList.innerHTML="";
+    snapshot.forEach(docSnap=>{
+      const r=docSnap.data();
+      const li=document.createElement("li");
+      li.innerHTML=`<span>${r.label}</span>
+      <div class="btnGroup">
+        <button onclick="showDesc(\`${r.desc}\`)">👁️</button>
+        <button onclick="deleteReminder('${docSnap.id}')">🗑️</button>
+      </div>`;
+      reminderList.appendChild(li);
+    });
+  });
+
+  onSnapshot(collection(db,"links"),snapshot=>{
+    linkList.innerHTML="";
+    snapshot.forEach(docSnap=>{
+      const l=docSnap.data();
+      const li=document.createElement("li");
+      li.innerHTML=`<a href="${l.url}" target="_blank">${l.label}</a>
+      <div class="btnGroup">
+        <button onclick="deleteLink('${docSnap.id}')">🗑️</button>
+      </div>`;
+      linkList.appendChild(li);
+    });
+  });
+}
+window.showDesc=(desc)=>{
+  descContent.innerHTML=desc;
+  openPopup("descPopup");
+};
+window.deleteReminder=async(id)=>{
+  await deleteDoc(doc(db,"reminders",id));
+  playSound("delete");
+};
+window.deleteLink=async(id)=>{
+  await deleteDoc(doc(db,"links",id));
+  playSound("delete");
+};
+
+/* --- FORMATTAZIONE TESTO --- */
+window.highlight=(color)=>{
+  document.execCommand("hiliteColor",false,color);
+};
+
+/* --- MIGLIORIE + CATEGORIE --- */
+document.getElementById("improvementsBtn").onclick=()=>openPopup("improvementsPopup");
+const categoryBtn=document.getElementById("categoryBtn");
+const categoryDropdown=document.getElementById("categoryDropdown");
+categoryBtn.onclick=()=>{
+  categoryDropdown.classList.toggle("hidden");
+};
