@@ -100,6 +100,7 @@ li:hover {
   background: #e0e0e0;
   transform: translateX(2px);
 }
+li span, li a { flex: 1; cursor: pointer; font-weight: 500; }
 
 /* BOTTONI LISTE */
 .btnGroup button {
@@ -130,7 +131,7 @@ li:hover {
   background: #fff;
   padding: 2rem;
   border-radius: 20px;
-  width: 400px;
+  width: 360px;
   max-width: 90%;
   display: flex;
   flex-direction: column;
@@ -153,8 +154,33 @@ li:hover {
 }
 .popup-content input:focus,
 .popup-content textarea:focus { border-color: #6a11cb; outline: none; }
-.saveBtn, .cancelBtn {
-  margin-top: 0.4rem;
+.saveBtn {
+  background: #6a11cb;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+.saveBtn:hover {
+  background: #2575fc;
+  transform: scale(1.05);
+}
+.cancelBtn {
+  background: #fc5c7d;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+.cancelBtn:hover {
+  background: #ff758c;
+  transform: scale(1.05);
 }
 
 /* POPUP DESCRIZIONE */
@@ -167,77 +193,9 @@ li:hover {
   border-radius: 12px;
   box-shadow: inset 0 4px 8px rgba(0,0,0,0.05);
   margin-bottom: 1rem;
-  white-space: pre-wrap;
 }
 
-/* Bottone triangolare */
-.triangle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 0;
-  height: 0;
-  border-left: 35px solid transparent;
-  border-right: 35px solid transparent;
-  border-bottom: 35px solid #6a11cb;
-  cursor: pointer;
-  z-index: 11000;
-  transition: transform 0.3s;
-}
-.triangle-btn:hover { transform: scale(1.1); }
-
-/* Dropdown categorie */
-.categories-menu {
-  position: fixed;
-  bottom: 70px;
-  right: 20px;
-}
-#categoryBtn {
-  background: #2575fc;
-  color: #fff;
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-.dropdown {
-  list-style: none;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-}
-.dropdown li { padding: 0.4rem; cursor: pointer; }
-.dropdown li ul { margin-left: 1rem; }
-.hidden { display: none; }
-
-/* Toolbar */
-.toolbar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 0.5rem;
-}
-.toolbar button {
-  padding: 0.3rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.toolbar button:hover { background: #eee; }
-
-/* Editor descrizione */
-.editable {
-  min-height: 120px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 0.6rem;
-  font-size: 1rem;
-  background: #fff;
-  white-space: pre-wrap;
-}
-/* Pagina di blocco (PIN) - ripristinata */
+/* PIN OVERLAY */
 .pin-overlay {
   position: fixed;
   top:0; left:0;
@@ -256,8 +214,26 @@ li:hover {
   width: 320px;
   box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
+.pin-box input { width: 100%; padding:0.6rem; margin:0.7rem 0; border-radius:12px; border:1px solid #ccc; }
+.pin-box button { padding:0.6rem 1rem; border:none; background:#6a11cb; color:#fff; border-radius:12px; cursor:pointer; font-weight:600; transition: background 0.3s, transform 0.2s; }
+.pin-box button:hover { background: #2575fc; transform: scale(1.05); }
 
-/* Triangolo idee */
+/* TOGGLE SUONI */
+.soundToggleBtn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #6a11cb;
+  color: #fff;
+  transition: background 0.3s, transform 0.2s;
+}
+.soundToggleBtn:hover { transform: scale(1.05); }
+.soundToggleBtn.on { background: #28a745; }
+.soundToggleBtn.off { background: #dc3545; }
+
+/* Bottone triangolo idee */
 #ideaBtn {
   position: fixed;
   bottom: 20px;
@@ -277,16 +253,12 @@ li:hover {
   z-index: 999;
   transition: transform 0.2s;
 }
-#ideaBtn:hover {
-  transform: scale(1.1);
-}
+#ideaBtn:hover { transform: scale(1.1); }
 
 /* Popup Idee */
-#ideaPopup .popup-content {
-  width: 400px;
-}
+#ideaPopup .popup-content { width: 400px; }
 
-/* Editor toolbar */
+/* Toolbar editor */
 .editor-toolbar {
   display: flex;
   gap: 8px;
@@ -305,3 +277,9 @@ li:hover {
   background: #d0e4ff;
 }
 
+/* MEDIA QUERY */
+@media (max-width: 500px) {
+  header { flex-direction: column; align-items: flex-start; padding: 1rem; }
+  .container { margin: 1rem; }
+  .popup-content { width: 90%; }
+}
