@@ -1,103 +1,53 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bacheca personale</title>
+<!-- Bottone triangolare miglioramenti -->
+<div id="improvementsBtn" class="triangle-btn"></div>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-  <!-- Stile -->
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- SCHERMATA PIN -->
-  <div id="pinOverlay" class="pin-overlay">
-    <div class="pin-box">
-      <h2>🔒 Inserisci il PIN</h2>
-      <input type="password" id="pinInput" placeholder="PIN" maxlength="6">
-      <button id="pinSubmit">Accedi</button>
-      <p id="pinError" class="error"></p>
-    </div>
+<!-- Popup miglioramenti -->
+<div class="popup" id="improvementsPopup">
+  <div class="popup-content">
+    <h3>💡 Idee per migliorie</h3>
+    <ul>
+      <li>🔹 Possibilità di categorie e sottocategorie nei promemoria</li>
+      <li>🔹 Evidenziatore multicolore</li>
+      <li>🔹 Migliore formattazione descrizioni (grassetto, a capo)</li>
+      <li>🔹 Interfacce più grandi e intuitive</li>
+    </ul>
+    <button class="cancelBtn" onclick="closePopup('improvementsPopup')">Chiudi</button>
   </div>
+</div>
 
-  <!-- CONTENUTO BACHECA -->
-  <div id="appContent" style="display:none;">
-    <header>
-      <h1>Bacheca personale</h1>
-      <div class="header-actions">
-        <button id="darkModeToggle">🌙</button>
-        <button id="settingsBtn">⚙️</button>
-      </div>
-    </header>
+<!-- Bottone categorie -->
+<div id="categoriesMenu" class="categories-menu">
+  <button id="categoryBtn">📂 Categorie</button>
+  <ul id="categoryDropdown" class="dropdown hidden">
+    <li>🏷️ Lavoro
+      <ul>
+        <li>Progetti</li>
+        <li>Scadenze</li>
+      </ul>
+    </li>
+    <li>📖 Studio
+      <ul>
+        <li>Appunti</li>
+        <li>Esami</li>
+      </ul>
+    </li>
+    <li>🏡 Personale
+      <ul>
+        <li>Spesa</li>
+        <li>Allenamento</li>
+      </ul>
+    </li>
+  </ul>
+</div>
 
-    <div class="container">
-      <h2>Promemoria <button class="addBtn" id="addReminderBtn">+</button></h2>
-      <ul id="reminderList"></ul>
-    </div>
+<!-- Toolbar formattazione in promemoria -->
+<div class="toolbar" id="formatToolbar">
+  <button onclick="document.execCommand('bold',false,null)">B</button>
+  <button onclick="highlight('yellow')">🟨</button>
+  <button onclick="highlight('lightblue')">🟦</button>
+  <button onclick="highlight('violet')">🟪</button>
+</div>
 
-    <div class="container">
-      <h2>Link salvati <button class="addBtn" id="addLinkBtn">+</button></h2>
-      <ul id="linkList"></ul>
-    </div>
-  </div>
-
-  <!-- POPUP PROMEMORIA -->
-  <div class="popup" id="reminderPopup">
-    <div class="popup-content">
-      <h3>Nuovo promemoria</h3>
-      <input type="text" id="reminderLabel" placeholder="Etichetta">
-      <textarea id="reminderDesc" placeholder="Descrizione..."></textarea>
-      <button class="saveBtn" id="saveReminder">Salva</button>
-      <button class="cancelBtn" id="cancelReminder">Annulla</button>
-    </div>
-  </div>
-
-  <!-- POPUP LINK -->
-  <div class="popup" id="linkPopup">
-    <div class="popup-content">
-      <h3>Nuovo link</h3>
-      <input type="text" id="label" placeholder="Etichetta">
-      <input type="url" id="url" placeholder="https://...">
-      <button class="saveBtn" id="saveLink">Salva</button>
-      <button class="cancelBtn" id="cancelLink">Annulla</button>
-    </div>
-  </div>
-
-  <!-- POPUP DESCRIZIONE -->
-  <div class="popup" id="descPopup">
-    <div class="popup-content">
-      <h3>Descrizione</h3>
-      <div id="descContent"></div>
-      <button class="cancelBtn" id="closeDescBtn">Chiudi</button>
-    </div>
-  </div>
-
-  <!-- POPUP IMPOSTAZIONI -->
-  <div class="popup" id="settingsPopup">
-    <div class="popup-content">
-      <h3>⚙️ Impostazioni</h3>
-      <input type="password" id="newPin" placeholder="Nuovo PIN">
-      <button class="saveBtn" id="savePin">Cambia PIN</button>
-      <button class="cancelBtn" id="closeSettings">Chiudi</button>
-      <button class="soundToggleBtn on" id="toggleSound">🔊 Suoni Attivi</button>
-    </div>
-  </div>
-
-  <!-- SUONI -->
-  <audio id="soundCreate" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-  <audio id="soundSave" src="https://actions.google.com/sounds/v1/office/pencil_write.ogg"></audio>
-  <audio id="soundDelete" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="soundClick" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_click.ogg"></audio>
-
-  <!-- SCRIPT -->
-  <script type="module" src="firebase-init.js"></script>
-  <script type="module" src="script.js"></script>
-
-</body>
-</html>
+<!-- Modifica textarea in contenteditable -->
+<textarea id="reminderDesc" placeholder="Descrizione..." style="display:none;"></textarea>
+<div id="reminderDescEditable" contenteditable="true" class="editable"></div>
